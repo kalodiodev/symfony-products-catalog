@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Welcome to Products Catalog{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1 class="display-3">Product</h1>
+        <hr>
+
+        <div class="row">
+            <div class="col-md-12">
+                <h3>{{ product.title }}</h3>
+                <p>{{ product.description }}</p>
+                <div>{{ product.price }}</div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

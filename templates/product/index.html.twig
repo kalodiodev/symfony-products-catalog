@@ -10,7 +10,7 @@
         <div class="row">
             {% for product in products %}
                 <div class="col-md-4">
-                    <h3>{{ product.title }}</h3>
+                    <h3><a href="{{ path('product_show', {'id': product.id}) }}">{{ product.title }}</a></h3>
                     <p>{{ product.description }} <span>{{ product.price }}</span></p>
                 </div>
             {% endfor %}

@@ -1,0 +1,24 @@
+{
+  "entrypoints": {
+    "js/bootstrap": {
+      "js": [
+        "/assets/js/bootstrap.js"
+      ]
+    },
+    "js/feather.min": {
+      "js": [
+        "/assets/js/feather.min.js"
+      ]
+    },
+    "css/dashboard": {
+      "css": [
+        "/assets/css/dashboard.css"
+      ]
+    },
+    "css/bootstrap": {
+      "css": [
+        "/assets/css/bootstrap.css"
+      ]
+    }
+  }
+}

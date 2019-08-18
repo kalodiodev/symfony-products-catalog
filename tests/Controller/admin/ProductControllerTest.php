@@ -21,6 +21,6 @@ class ProductControllerTest extends DbWebTestCase
 
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('h1', 'Products');
-        $this->assertCount(3, $crawler->filter('tr'));
+        $this->assertCount(2, $crawler->filter('tbody > tr'));
     }
 }

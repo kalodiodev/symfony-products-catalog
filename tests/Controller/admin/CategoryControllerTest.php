@@ -4,6 +4,7 @@ namespace App\Tests\Controller\Admin;
 
 use App\Entity\Category;
 use App\Tests\DbWebTestCase;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class CategoryControllerTest extends DbWebTestCase
 {
@@ -90,6 +91,40 @@ class CategoryControllerTest extends DbWebTestCase
 
         $count = $this->entityManager->getRepository(Category::class)->count([]);
         $this->assertEquals(3, $count);
+    }
+
+    /** @test */
+    public function a_user_can_update_a_category()
+    {
+        $this->logIn();
+
+        $this->client->catchExceptions(false);
+
+        $this->client->request('GET', '/admin/categories/smartphones/edit');
+        $this->client->submitForm('Save Category', $this->categoryFormData());
+
+        $this->assertResponseRedirects('/admin/categories');
+
+        $category = $this->entityManager->getRepository(Category::class)->findOneBy(['name' => 'Testing']);
+
+        $this->assertNotNull($category);
+        $this->assertSame('Testing', $category->getName());
+        $this->assertSame('testing', $category->getSlug());
+        $this->assertEquals(3,  $this->entityManager->getRepository(Category::class)->count([]));
+    }
+
+    /**
+     * @test
+     */
+    public function cannot_update_a_category_that_does_not_exist()
+    {
+        $this->logIn();
+
+        $this->client->catchExceptions(false);
+
+        $this->expectException(NotFoundHttpException::class);
+
+        $this->client->request('GET', '/admin/categories/toys/edit');
     }
 
     public function invalidDataOverridesProvider()

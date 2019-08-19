@@ -15,17 +15,20 @@ class CategoryType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
+                'empty_data' => '',
                 'attr' => [
                     'placeholder' => 'Enter category name'
                 ]
             ])
             ->add('description', TextType::class, [
+                'empty_data' => '',
                 'required' => false,
                 'attr' => [
                     'placeholder' => 'Enter category description'
                 ]
             ])
             ->add('slug', TextType::class, [
+                'empty_data' => '',
                 'attr' => [
                     'placeholder' => 'Enter category slug'
                 ]

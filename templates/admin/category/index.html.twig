@@ -22,7 +22,7 @@
                     <td>{{ category.name }}</td>
                     <td>{{ category.description }}</td>
                     <td>
-                        <a class="btn btn-sm btn-warning" href="">Edit</a>
+                        <a class="btn btn-sm btn-warning" href="{{ path('admin_categories_update', {'slug': category.slug}) }}">Edit</a>
                     </td>
                 </tr>
             {% endfor %}

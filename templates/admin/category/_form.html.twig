@@ -1,0 +1,36 @@
+{{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+<div class="form-group">
+    <label for="name">Category Name</label>
+    {{ form_widget(form.name, {'attr': {'class': 'form-control' ~ (form_errors(form.name) ? ' is-invalid' : '') }}) }}
+    <div class="invalid-feedback">
+        {% if form.name.vars['errors']|length > 0 %}
+            {{ form.name.vars['errors'][0].message }}
+        {% endif %}
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="description">Category Description</label>
+    {{ form_widget(form.description, {'attr': {'class': 'form-control' ~ (form_errors(form.description) ? ' is-invalid' : '') }}) }}
+    <div class="invalid-feedback">
+        {#                {% for error in form.description.vars['errors'] %}#}
+        {#                    {{ error.message }}#}
+        {#                {% endfor %}#}
+        {% if form.description.vars['errors']|length > 0 %}
+            {{ form.description.vars['errors'][0].message }}
+        {% endif %}
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="name">Category Slug</label>
+    {{ form_widget(form.slug, {'attr':{'class': 'form-control' ~ (form_errors(form.slug) ? ' is-invalid' : '') }}) }}
+    <div class="invalid-feedback">
+        {% if form.slug.vars['errors']|length > 0 %}
+            {{ form.slug.vars['errors'][0].message }}
+        {% endif %}
+    </div>
+</div>
+
+{{ form_widget(form.save, {'attr': {'class': 'btn btn-primary'}}) }}
+{{ form_end(form) }}

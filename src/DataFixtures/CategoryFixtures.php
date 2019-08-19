@@ -10,11 +10,11 @@ class CategoryFixtures extends Fixture
 {
     public function load(ObjectManager $manager)
     {
-        foreach ($this->categories() as [$name, $description, $seoUrl]) {
+        foreach ($this->categories() as [$name, $description, $slug]) {
             $category = new Category();
             $category->setName($name);
             $category->setDescription($description);
-            $category->setSeoUrl($seoUrl);
+            $category->setSlug($slug);
 
             $manager->persist($category);
         }

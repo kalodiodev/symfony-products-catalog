@@ -37,7 +37,7 @@ class Category
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $seo_url;
+    private $slug;
 
     public function __construct()
     {
@@ -73,14 +73,14 @@ class Category
         return $this;
     }
 
-    public function getSeoUrl(): ?string
+    public function getSlug(): ?string
     {
-        return $this->seo_url;
+        return $this->slug;
     }
 
-    public function setSeoUrl(string $seo_url): self
+    public function setSlug(string $slug): self
     {
-        $this->seo_url = $seo_url;
+        $this->slug = $slug;
 
         return $this;
     }

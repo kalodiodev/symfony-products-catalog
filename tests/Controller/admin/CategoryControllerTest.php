@@ -75,6 +75,30 @@ class CategoryControllerTest extends DbWebTestCase
         $this->assertSame('testing', $category->getSlug());
     }
 
+    /**
+     * @test
+     * @dataProvider invalidDataOverridesProvider
+     */
+    public function category_create_validation($field, $value)
+    {
+        $this->login();
+
+        $this->client->request('GET', '/admin/categories/create');
+        $this->client->submitForm('Save Category', $this->categoryFormData([$field => $value]));
+
+        $this->assertRouteSame('admin_categories_create');
+
+        $count = $this->entityManager->getRepository(Category::class)->count([]);
+        $this->assertEquals(3, $count);
+    }
+
+    public function invalidDataOverridesProvider()
+    {
+        yield ['category[name]', ''];  // Empty name
+        yield ['category[name]', 'a'];  // Min name length
+        yield ['category[slug]', ''];  // Empty slug
+    }
+
     protected function categoryFormData($overrides = [])
     {
         return array_merge([

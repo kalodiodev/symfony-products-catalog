@@ -3,13 +3,20 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Product;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+/**
+ * Controller used to manage products
+ *
+ * @Route("/admin/products")
+ */
 class ProductController extends AbstractController
 {
     /**
-     * @Route("/admin/products", name="admin_products")
+     * List all products
+     *
+     * @Route("", name="admin_products")
      */
     public function index()
     {

@@ -127,6 +127,44 @@ class CategoryControllerTest extends DbWebTestCase
         $this->client->request('GET', '/admin/categories/5/edit');
     }
 
+    /** @test */
+    public function a_guest_cannot_delete_a_category()
+    {
+        $this->client->request('POST', '/admin/categories/1/delete');
+
+        $this->assertResponseRedirects('/login');
+    }
+
+    /** @test */
+    public function a_user_can_delete_a_category()
+    {
+        $this->logIn();
+
+        $this->client->request('GET', '/admin/categories/1/edit');
+        $this->client->submitForm('Delete Category');
+
+        $this->assertResponseRedirects('/admin/categories');
+
+        $category = $this->entityManager->getRepository(Category::class)->find(1);
+
+        $this->assertNull($category);
+    }
+
+    /** @test */
+    public function cannot_delete_a_category_with_invalid_csrf_token()
+    {
+        $this->logIn();
+
+        $this->client->request('GET', '/admin/categories/1/edit');
+        $this->client->submitForm('Delete Category', ['token' => "invalid_token"]);
+
+        $this->assertResponseRedirects('/admin/categories/1/edit');
+
+        $category = $this->entityManager->getRepository(Category::class)->find(1);
+
+        $this->assertNotNull($category);
+    }
+
     public function invalidDataOverridesProvider()
     {
         yield ['category[name]', ''];  // Empty name

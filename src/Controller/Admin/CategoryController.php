@@ -89,7 +89,30 @@ class CategoryController extends AbstractController
         }
 
         return $this->render('admin/category/update.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'category' => $category
         ]);
+    }
+
+    /**
+     * Delete Category
+     *
+     * @Route("/{id}/delete", name="admin_categories_delete", methods={"POST"})
+     */
+    public function destroy(Category $category, Request $request): Response
+    {
+        if (!$this->isCsrfTokenValid('delete', $request->request->get('token'))) {
+            $this->addFlash('danger', 'Token mismatch!');
+
+            return $this->redirectToRoute('admin_categories_update', ['id' => $category->getId()]);
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($category);
+        $em->flush();
+
+        $this->addFlash('success', 'Category Deleted!');
+
+        return $this->redirectToRoute('admin_categories');
     }
 }

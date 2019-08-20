@@ -3,6 +3,9 @@
 {% block title %}Admin - Update Category{% endblock %}
 
 {% block body %}
+
+    {% include 'admin/category/_delete_form.html.twig' %}
+
     <h1>Update Category</h1>
 
     {% include 'admin/category/_form.html.twig' %}

@@ -6,14 +6,16 @@ use App\Tests\DbWebTestCase;
 
 class ProductControllerTest extends DbWebTestCase
 {
-    public function testAGuestCannotIndexProducts()
+    /** @test */
+    public function a_guest_cannot_index_products()
     {
         $this->client->request('GET', '/admin/products');
 
         $this->assertResponseRedirects('/login');
     }
 
-    public function testIndexProducts()
+    /** @test */
+    public function index_products()
     {
         $this->logIn();
 

@@ -6,7 +6,8 @@ use App\Tests\DbWebTestCase;
 
 class ProductControllerTest extends DbWebTestCase
 {
-    public function testIndexProducts()
+    /** @test */
+    public function index_products()
     {
         $crawler = $this->client->request('GET', '/products');
 
@@ -15,7 +16,8 @@ class ProductControllerTest extends DbWebTestCase
         $this->assertCount(2, $crawler->filter('h3'));
     }
 
-    public function testShowProduct()
+    /** @test */
+    public function show_product()
     {
         $this->client->request('GET', '/products/1');
 

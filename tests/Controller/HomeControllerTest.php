@@ -6,7 +6,8 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class HomeControllerTest extends WebTestCase
 {
-    public function testIndexHomepage()
+    /** @test */
+    public function index_homepage()
     {
         $client = static::createClient();
         $crawler = $client->request('GET', '/');

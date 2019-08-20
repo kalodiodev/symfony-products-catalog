@@ -66,12 +66,12 @@ class CategoryController extends AbstractController
     /**
      * Edit and update a category
      *
-     * @Route("/{slug}/edit", name="admin_categories_update", methods={"GET", "POST"})
+     * @Route("/{id}/edit", name="admin_categories_update", methods={"GET", "POST"})
      */
     public function update(Category $category, EntityManagerInterface $em, Request $request): Response
     {
         $form = $this->createForm(CategoryType::class, $category, [
-            'action' => $this->generateUrl('admin_categories_update', ['slug' => $category->getSlug()]),
+            'action' => $this->generateUrl('admin_categories_update', ['id' => $category->getId()]),
             'method' => 'POST'
         ]);;
 

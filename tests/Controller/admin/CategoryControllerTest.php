@@ -100,12 +100,12 @@ class CategoryControllerTest extends DbWebTestCase
 
         $this->client->catchExceptions(false);
 
-        $this->client->request('GET', '/admin/categories/smartphones/edit');
+        $this->client->request('GET', '/admin/categories/1/edit');
         $this->client->submitForm('Save Category', $this->categoryFormData());
 
         $this->assertResponseRedirects('/admin/categories');
 
-        $category = $this->entityManager->getRepository(Category::class)->findOneBy(['name' => 'Testing']);
+        $category = $this->entityManager->getRepository(Category::class)->find(1);
 
         $this->assertNotNull($category);
         $this->assertSame('Testing', $category->getName());
@@ -124,7 +124,7 @@ class CategoryControllerTest extends DbWebTestCase
 
         $this->expectException(NotFoundHttpException::class);
 
-        $this->client->request('GET', '/admin/categories/toys/edit');
+        $this->client->request('GET', '/admin/categories/5/edit');
     }
 
     public function invalidDataOverridesProvider()

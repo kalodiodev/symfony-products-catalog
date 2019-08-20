@@ -131,6 +131,7 @@ class CategoryControllerTest extends DbWebTestCase
     {
         yield ['category[name]', ''];  // Empty name
         yield ['category[name]', 'a'];  // Min name length
+        yield ['category[name]', $this->generateRandomString(51)];  // Max name length
         yield ['category[slug]', ''];  // Empty slug
     }
 
@@ -141,5 +142,11 @@ class CategoryControllerTest extends DbWebTestCase
             'category[description]' => "This is a great category",
             'category[slug]' => "testing"
         ], $overrides);
+    }
+
+    private function generateRandomString(int $length): string
+    {
+        $chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        return mb_substr(str_shuffle(str_repeat($chars, ceil($length / mb_strlen($chars)))), 1, $length);
     }
 }

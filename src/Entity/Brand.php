@@ -10,6 +10,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Table(name="brands")
  * @ORM\Entity(repositoryClass="App\Repository\BrandRepository")
  * @UniqueEntity(fields={"slug"})
+ * @UniqueEntity(fields={"name"})
  */
 class Brand
 {

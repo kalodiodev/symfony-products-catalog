@@ -85,6 +85,7 @@ class BrandControllerTest extends DbWebTestCase
     public function invalidDataOverridesProvider()
     {
         yield ['brand[name]', '', 'Brand name cannot be empty'];  // Empty name
+        yield ['brand[name]', 'One', 'Brand name should be unique']; // Duplicate name
         yield ['brand[name]', 'a', 'Brand name min length'];  // Min name length
         yield ['brand[name]', $this->generateRandomString(81), 'Brand name max length'];  // Max name length
         yield ['brand[slug]', '', 'Brand slug cannot be empty'];  // Empty slug

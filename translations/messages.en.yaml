@@ -78,6 +78,13 @@ admin:
       add: Add Category
       delete: Delete Category
       save: Save Category
+    flash:
+      success:
+        created: Category Created!
+        updated: Category Updated!
+        deleted: Categoty Deleted!
+      error:
+        token_mismatch: Token Mismatch!
 
 # authentication
 auth:

@@ -53,7 +53,7 @@ class CategoryController extends AbstractController
             $em->persist($category);
             $em->flush();
 
-            $this->addFlash('success', 'Category Created!');
+            $this->addFlash('success', 'admin.categories.flash.success.created');
 
             return $this->redirectToRoute('admin_categories');
         }
@@ -83,7 +83,7 @@ class CategoryController extends AbstractController
             $em->persist($category);
             $em->flush();
 
-            $this->addFlash('success', 'Category Updated!');
+            $this->addFlash('success', 'admin.categories.flash.success.updated');
 
             return $this->redirectToRoute('admin_categories');
         }
@@ -102,7 +102,7 @@ class CategoryController extends AbstractController
     public function destroy(Category $category, Request $request): Response
     {
         if (!$this->isCsrfTokenValid('delete', $request->request->get('token'))) {
-            $this->addFlash('danger', 'Token mismatch!');
+            $this->addFlash('error', 'admin.categories.flash.error.token_mismatch');
 
             return $this->redirectToRoute('admin_categories_update', ['id' => $category->getId()]);
         }
@@ -111,7 +111,7 @@ class CategoryController extends AbstractController
         $em->remove($category);
         $em->flush();
 
-        $this->addFlash('success', 'Category Deleted!');
+        $this->addFlash('success', 'admin.categories.flash.success.deleted');
 
         return $this->redirectToRoute('admin_categories');
     }

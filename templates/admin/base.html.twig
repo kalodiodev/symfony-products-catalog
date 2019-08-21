@@ -70,13 +70,13 @@
         <main role="main" class="mt-3 col-md-9 ml-sm-auto col-lg-10 px-4">
             {% for message in app.flashes('success') %}
                 <div class="alert alert-success">
-                    {{ message }}
+                    {{ message|trans }}
                 </div>
             {% endfor %}
 
-            {% for message in app.flashes('danger') %}
+            {% for message in app.flashes('error') %}
                 <div class="alert alert-danger">
-                    {{ message }}
+                    {{ message|trans }}
                 </div>
             {% endfor %}
 

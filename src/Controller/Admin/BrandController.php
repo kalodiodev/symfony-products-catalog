@@ -62,4 +62,35 @@ class BrandController extends AbstractController
             'form' => $form->createView()
         ]);
     }
+
+    /**
+     * Edit and update a brand
+     *
+     * @Route("/{id}/edit", name="admin_brands_update", methods={"GET", "POST"})
+     */
+    public function update(Brand $brand, EntityManagerInterface $em, Request $request): Response
+    {
+        $form = $this->createForm(BrandType::class, $brand, [
+            'action' => $this->generateUrl('admin_brands_update', ['id' => $brand->getId()]),
+            'method' => 'POST'
+        ]);;
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $brand = $form->getData();
+
+            $em->persist($brand);
+            $em->flush();
+
+            $this->addFlash('success', 'admin.brands.flash.success.updated');
+
+            return $this->redirectToRoute('admin_brands');
+        }
+
+        return $this->render('admin/brand/update.html.twig', [
+            'form' => $form->createView(),
+            'brand' => $brand
+        ]);
+    }
 }

@@ -23,7 +23,7 @@
                     <td>{{ brand.details }}</td>
                     <td>
                         <a class="btn btn-sm btn-warning"
-                           href="#">
+                           href="{{ path('admin_brands_update', {'id': brand.id}) }}">
                             {{ 'admin.brands.button.edit'|trans }}
                         </a>
                     </td>

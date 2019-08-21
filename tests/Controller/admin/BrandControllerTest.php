@@ -82,6 +82,26 @@ class BrandControllerTest extends DbWebTestCase
         $this->assertEquals(3, $count, $errorMsg);
     }
 
+    /** @test */
+    public function a_user_can_update_a_brand()
+    {
+        $this->logIn();
+
+        $this->client->catchExceptions(false);
+
+        $this->client->request('GET', '/admin/brands/1/edit');
+        $this->client->submitForm('Save Brand', $this->brandFormData());
+
+        $this->assertResponseRedirects('/admin/brands');
+
+        $brand = $this->entityManager->getRepository(Brand::class)->find(1);
+
+        $this->assertNotNull($brand);
+        $this->assertSame('MyBrand', $brand->getName());
+        $this->assertSame('my-brand', $brand->getSlug());
+        $this->assertEquals(3, $this->entityManager->getRepository(Brand::class)->count([]));
+    }
+
     public function invalidDataOverridesProvider()
     {
         yield ['brand[name]', '', 'Brand name cannot be empty'];  // Empty name

@@ -41,6 +41,10 @@ admin:
       head:
         title: Admin - Create Brand
       title: Create Brand
+    edit:
+      head:
+        title: Admin - Edit Brand
+      title: Update Brand
     table:
       id: ID
       name: Name
@@ -64,6 +68,7 @@ admin:
     flash:
       success:
         created: Brand Created!
+        updated: Brand Updated!
 
   products:
     index:
@@ -116,7 +121,7 @@ admin:
       success:
         created: Category Created!
         updated: Category Updated!
-        deleted: Categoty Deleted!
+        deleted: Category Deleted!
       error:
         token_mismatch: Token Mismatch!
 

@@ -1,0 +1,11 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}{{ 'admin.brands.edit.head.title'|trans }}{% endblock %}
+
+{% block body %}
+
+    <h1>{{ 'admin.brands.edit.title'|trans }}</h1>
+
+    {% include 'admin/brand/_form.html.twig' %}
+
+{% endblock %}

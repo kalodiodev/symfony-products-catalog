@@ -3,10 +3,13 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Table(name="brands")
  * @ORM\Entity(repositoryClass="App\Repository\BrandRepository")
+ * @UniqueEntity(fields={"slug"})
  */
 class Brand
 {
@@ -19,6 +22,11 @@ class Brand
 
     /**
      * @ORM\Column(type="string", length=80)
+     * @Assert\NotBlank()
+     * @Assert\Length(
+     *     min = 2,
+     *     max = 80
+     * )
      */
     private $name;
 
@@ -29,6 +37,7 @@ class Brand
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
      */
     private $slug;
 

@@ -180,10 +180,4 @@ class CategoryControllerTest extends DbWebTestCase
             'category[slug]' => "testing"
         ], $overrides);
     }
-
-    private function generateRandomString(int $length): string
-    {
-        $chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        return mb_substr(str_shuffle(str_repeat($chars, ceil($length / mb_strlen($chars)))), 1, $length);
-    }
 }

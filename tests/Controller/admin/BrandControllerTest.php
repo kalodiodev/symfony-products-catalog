@@ -65,6 +65,32 @@ class BrandControllerTest extends DbWebTestCase
         $this->assertSame($this->brandFormData()['brand[slug]'], $brand->getSlug());
     }
 
+    /**
+     * @test
+     * @dataProvider invalidDataOverridesProvider
+     */
+    public function brand_create_validation($field, $value, $errorMsg)
+    {
+        $this->login();
+
+        $this->client->request('GET', '/admin/brands/create');
+        $this->client->submitForm('Save Brand', $this->brandFormData([$field => $value]));
+
+        $this->assertRouteSame('admin_brands_create');
+
+        $count = $this->entityManager->getRepository(Brand::class)->count([]);
+        $this->assertEquals(3, $count, $errorMsg);
+    }
+
+    public function invalidDataOverridesProvider()
+    {
+        yield ['brand[name]', '', 'Brand name cannot be empty'];  // Empty name
+        yield ['brand[name]', 'a', 'Brand name min length'];  // Min name length
+        yield ['brand[name]', $this->generateRandomString(81), 'Brand name max length'];  // Max name length
+        yield ['brand[slug]', '', 'Brand slug cannot be empty'];  // Empty slug
+        yield ['brand[slug]', 'one', 'Brand slug should be unique']; // Duplicate slug
+    }
+
     private function brandFormData($overrides = [])
     {
         return array_merge([

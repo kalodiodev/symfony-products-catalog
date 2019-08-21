@@ -37,14 +37,33 @@ admin:
       head:
         title: Admin - Brands
       title: Brands
+    create:
+      head:
+        title: Admin - Create Brand
+      title: Create Brand
     table:
       id: ID
       name: Name
       details: Details
       action: Action
+    form:
+      name:
+        label: Brand Name
+        placeholder: Enter brand name
+      details:
+        label: Brand Details
+        placeholder: Enter brand details
+      slug:
+        label: Brand Slug
+        placeholder: Enter brand slug
     button:
       add: Add Brand
       edit: Edit
+      delete: Delete Brand
+      save: Save Brand
+    flash:
+      success:
+        created: Brand Created!
 
   products:
     index:

@@ -3,6 +3,9 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Brand;
+use App\Form\BrandType;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -25,6 +28,38 @@ class BrandController extends AbstractController
 
         return $this->render('admin/brand/index.html.twig', [
             'brands' => $brands
+        ]);
+    }
+
+    /**
+     * Create brand
+     *
+     * @Route("/create", name="admin_brands_create", methods={"GET", "POST"})
+     */
+    public function create(EntityManagerInterface $em, Request $request): Response
+    {
+        $brand = new Brand();
+
+        $form = $this->createForm(BrandType::class, $brand, [
+            'action' => $this->generateUrl('admin_brands_create'),
+            'method' => 'POST'
+        ]);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $brand = $form->getData();
+
+            $em->persist($brand);
+            $em->flush();
+
+            $this->addFlash('success', 'admin.brands.flash.success.created');
+
+            return $this->redirectToRoute('admin_brands');
+        }
+
+        return $this->render('admin/brand/create.html.twig', [
+            'form' => $form->createView()
         ]);
     }
 }

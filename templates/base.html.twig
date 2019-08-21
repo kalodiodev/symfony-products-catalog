@@ -10,35 +10,43 @@
     </head>
     <body>
         <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-            <a class="navbar-brand" href="#">Navbar</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <a class="navbar-brand" href="#">{{ 'app.title'|trans }}</a>
+            <button class="navbar-toggler"
+                    type="button"
+                    data-toggle="collapse"
+                    data-target="#navbarNavDropdown"
+                    aria-controls="navbarNavDropdown"
+                    aria-expanded="false"
+                    aria-label="Toggle
+                    navigation">
+
                 <span class="navbar-toggler-icon"></span>
             </button>
 
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" href="{{ path('home') }}">Home <span class="sr-only">(current)</span></a>
+                        <a class="nav-link" href="{{ path('home') }}">{{ 'menu.home'|trans }}</a>
                     </li>
 
                     {{ render(controller("App\\Controller\\CategoryController::navbarCategories")) }}
 
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ path('products') }}">Products</a>
+                        <a class="nav-link" href="{{ path('products') }}">{{ 'menu.products'|trans }}</a>
                     </li>
                 </ul>
 
                 <ul class="navbar-nav mr-0">
                     {% if not app.user %}
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Sign Up</a>
+                            <a class="nav-link" href="#">{{ 'auth.signup'|trans }}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ path('app_login') }}">Sign In</a>
+                            <a class="nav-link" href="{{ path('app_login') }}">{{ 'auth.signin'|trans }}</a>
                         </li>
                     {% else %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ path('app_logout') }}">Logout</a>
+                            <a class="nav-link" href="{{ path('app_logout') }}">{{ 'auth.logout'|trans }}</a>
                         </li>
                     {% endif %}
                 </ul>

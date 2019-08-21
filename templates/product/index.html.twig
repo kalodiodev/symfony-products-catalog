@@ -1,10 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Welcome to Products Catalog{% endblock %}
+{% block title %}{{ 'page.products.head.title'|trans }}{% endblock %}
 
 {% block body %}
     <div class="container mt-5">
-        <h1 class="display-3">Products</h1>
+        <h1 class="display-3">{{ 'page.products.title'|trans }}</h1>
         <hr>
 
         <div class="row">

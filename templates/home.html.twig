@@ -1,12 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Welcome to Products Catalog{% endblock %}
+{% block title %}{{ 'page.front.head.title'|trans }}{% endblock %}
 
 {% block body %}
     <div class="jumbotron">
         <div class="container">
-            <h1 class="display-3">Products Catalog</h1>
-            <p>A simple products catalog</p>
+            <h1 class="display-3">{{ 'app.title'|trans }}</h1>
+            <p>{{ 'app.description'|trans }}</p>
             <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more &raquo;</a></p>
         </div>
     </div>

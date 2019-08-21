@@ -1,0 +1,35 @@
+app:
+  title: Products Catalog
+  description: A simple products catalog
+
+menu:
+  home: Home
+  categories: Categories
+  products: Products
+
+page:
+  front:
+    head:
+      title: Products Catalog - Welcome
+  products:
+    head:
+      title: Products Catalog - Products
+    title: Products
+  product:
+    head:
+      title: Products Catalog - Product
+    title: Product
+
+auth:
+  message:
+    loggedin: You are logged in as
+  signin: Sign In
+  signup: Sign Up
+  logout: Logout
+  form:
+    login:
+      title: Please sign in
+      field:
+        email: Email
+        password: Password
+        rememberme: Remember me

@@ -1,6 +1,12 @@
 <li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Categories
+    <a class="nav-link dropdown-toggle"
+       href="#"
+       id="navbarDropdownMenuLink"
+       role="button"
+       data-toggle="dropdown"
+       aria-haspopup="true"
+       aria-expanded="false">
+        {{ 'menu.categories'|trans }}
     </a>
     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
         {% for category in categories %}

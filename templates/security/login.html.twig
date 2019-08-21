@@ -63,13 +63,13 @@
                     {% endif %}
 
                     {% if app.user %}
-                        <div class="checkbox mb-3">You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a></div>
+                        <div class="checkbox mb-3">{{ 'auth.message.loggedin'|trans }} {{ app.user.username }}, <a href="{{ path('app_logout') }}">{{ 'auth.logout'|trans }}</a></div>
                     {% endif %}
 
-                    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-                    <label for="inputEmail" class="sr-only">Email</label>
+                    <h1 class="h3 mb-3 font-weight-normal">{{ 'auth.form.login.title'|trans }}</h1>
+                    <label for="inputEmail" class="sr-only">{{ 'auth.form.login.field.email'|trans }}</label>
                     <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" placeholder="Email" required autofocus>
-                    <label for="inputPassword" class="sr-only">Password</label>
+                    <label for="inputPassword" class="sr-only">{{ 'auth.form.login.field.password'|trans }}</label>
                     <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
 
                     <input type="hidden" name="_csrf_token"
@@ -82,13 +82,13 @@
 
                         <div class="checkbox mb-3">
                             <label>
-                                <input type="checkbox" name="_remember_me"> Remember me
+                                <input type="checkbox" name="_remember_me"> {{ 'auth.form.login.field.rememberme'|trans }}
                             </label>
                         </div>
                     #}
 
                     <button class="btn btn-primary" type="submit">
-                        Sign in
+                        {{ 'auth.signin'|trans }}
                     </button>
                 </form>
     </div>

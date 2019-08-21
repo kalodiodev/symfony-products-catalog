@@ -80,7 +80,7 @@ class CategoryControllerTest extends DbWebTestCase
      * @test
      * @dataProvider invalidDataOverridesProvider
      */
-    public function category_create_validation($field, $value)
+    public function category_create_validation($field, $value, $errorMsg)
     {
         $this->login();
 
@@ -90,7 +90,7 @@ class CategoryControllerTest extends DbWebTestCase
         $this->assertRouteSame('admin_categories_create');
 
         $count = $this->entityManager->getRepository(Category::class)->count([]);
-        $this->assertEquals(3, $count);
+        $this->assertEquals(3, $count, $errorMsg);
     }
 
     /** @test */
@@ -113,9 +113,7 @@ class CategoryControllerTest extends DbWebTestCase
         $this->assertEquals(3,  $this->entityManager->getRepository(Category::class)->count([]));
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function cannot_update_a_category_that_does_not_exist()
     {
         $this->logIn();
@@ -167,10 +165,11 @@ class CategoryControllerTest extends DbWebTestCase
 
     public function invalidDataOverridesProvider()
     {
-        yield ['category[name]', ''];  // Empty name
-        yield ['category[name]', 'a'];  // Min name length
-        yield ['category[name]', $this->generateRandomString(51)];  // Max name length
-        yield ['category[slug]', ''];  // Empty slug
+        yield ['category[name]', '', 'Category name cannot be empty'];  // Empty name
+        yield ['category[name]', 'a', 'Category name min length'];  // Min name length
+        yield ['category[name]', $this->generateRandomString(51), 'Category name max length'];  // Max name length
+        yield ['category[slug]', '', 'Category slug cannot be empty'];  // Empty slug
+        yield ['category[slug]', 'laptops', 'Category slug should be unique']; // Duplicate slug
     }
 
     protected function categoryFormData($overrides = [])

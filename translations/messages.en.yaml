@@ -27,9 +27,24 @@ admin:
   menu:
     dashboard: Dashboard
     categories: Categories
+    brands: Brands
     products: Products
     options: Options
     frontpage: Front
+
+  brands:
+    index:
+      head:
+        title: Admin - Brands
+      title: Brands
+    table:
+      id: ID
+      name: Name
+      details: Details
+      action: Action
+    button:
+      add: Add Brand
+      edit: Edit
 
   products:
     index:

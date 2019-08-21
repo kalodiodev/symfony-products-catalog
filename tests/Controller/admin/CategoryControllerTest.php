@@ -166,6 +166,7 @@ class CategoryControllerTest extends DbWebTestCase
     public function invalidDataOverridesProvider()
     {
         yield ['category[name]', '', 'Category name cannot be empty'];  // Empty name
+        yield ['category[name]', 'Laptops', 'Category name should be unique']; // Duplicate name
         yield ['category[name]', 'a', 'Category name min length'];  // Min name length
         yield ['category[name]', $this->generateRandomString(51), 'Category name max length'];  // Max name length
         yield ['category[slug]', '', 'Category slug cannot be empty'];  // Empty slug

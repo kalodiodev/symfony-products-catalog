@@ -17,23 +17,23 @@ class CategoryType extends AbstractType
             ->add('name', TextType::class, [
                 'empty_data' => '',
                 'attr' => [
-                    'placeholder' => 'Enter category name'
+                    'placeholder' => 'admin.categories.form.name.placeholder'
                 ]
             ])
             ->add('description', TextType::class, [
                 'empty_data' => '',
                 'required' => false,
                 'attr' => [
-                    'placeholder' => 'Enter category description'
+                    'placeholder' => 'admin.categories.form.description.placeholder'
                 ]
             ])
             ->add('slug', TextType::class, [
                 'empty_data' => '',
                 'attr' => [
-                    'placeholder' => 'Enter category slug'
+                    'placeholder' => 'admin.categories.form.slug.placeholder'
                 ]
             ])
-            ->add('save', SubmitType::class, ['label' => 'Save Category'])
+            ->add('save', SubmitType::class, ['label' => 'admin.categories.button.save'])
         ;
     }
 

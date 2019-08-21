@@ -2,11 +2,13 @@ app:
   title: Products Catalog
   description: A simple products catalog
 
+# Public menu
 menu:
   home: Home
   categories: Categories
   products: Products
 
+# Public Pages
 page:
   front:
     head:
@@ -20,6 +22,64 @@ page:
       title: Products Catalog - Product
     title: Product
 
+# Admin area
+admin:
+  menu:
+    dashboard: Dashboard
+    categories: Categories
+    products: Products
+    options: Options
+    frontpage: Front
+
+  products:
+    index:
+      head:
+        title: Admin - Products
+      title: Products
+    table:
+      id: ID
+      title: Title
+      description: Description
+      action: Action
+    button:
+      edit: Edit
+      add: Add Product
+
+  categories:
+    index:
+      head:
+        title: Admin - Categories
+      title: Categories
+    create:
+      head:
+        title: Admin - Create Category
+      title: Create Category
+    edit:
+      head:
+        title: Admin - Edit Category
+      title: Update Category
+    table:
+      id: ID
+      name: Name
+      description: Description
+      action: Action
+    form:
+      name:
+        label: Category Name
+        placeholder: Enter category name
+      description:
+        label: Category Description
+        placeholder: Enter category description
+      slug:
+        label: Category Slug
+        placeholder: Enter category slug
+    button:
+      edit: Edit
+      add: Add Category
+      delete: Delete Category
+      save: Save Category
+
+# authentication
 auth:
   message:
     loggedin: You are logged in as

@@ -1,6 +1,6 @@
 {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
 <div class="form-group">
-    <label for="name">Category Name</label>
+    <label for="name">{{ 'admin.categories.form.name.label'|trans }}</label>
     {{ form_widget(form.name, {'attr': {'class': 'form-control' ~ (form_errors(form.name) ? ' is-invalid' : '') }}) }}
     <div class="invalid-feedback">
         {% if form.name.vars['errors']|length > 0 %}
@@ -10,7 +10,7 @@
 </div>
 
 <div class="form-group">
-    <label for="description">Category Description</label>
+    <label for="description">{{ 'admin.categories.form.description.label'|trans }}</label>
     {{ form_widget(form.description, {'attr': {'class': 'form-control' ~ (form_errors(form.description) ? ' is-invalid' : '') }}) }}
     <div class="invalid-feedback">
         {#                {% for error in form.description.vars['errors'] %}#}
@@ -23,7 +23,7 @@
 </div>
 
 <div class="form-group">
-    <label for="name">Category Slug</label>
+    <label for="name">{{ 'admin.categories.form.slug.label'|trans }}</label>
     {{ form_widget(form.slug, {'attr':{'class': 'form-control' ~ (form_errors(form.slug) ? ' is-invalid' : '') }}) }}
     <div class="invalid-feedback">
         {% if form.slug.vars['errors']|length > 0 %}

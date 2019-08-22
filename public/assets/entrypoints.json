@@ -2,20 +2,22 @@
   "entrypoints": {
     "js/bootstrap": {
       "js": [
+        "/assets/runtime.js",
         "/assets/js/bootstrap.js"
       ]
     },
-    "js/feather.min": {
-      "js": [
-        "/assets/js/feather.min.js"
-      ]
-    },
     "css/dashboard": {
+      "js": [
+        "/assets/runtime.js"
+      ],
       "css": [
         "/assets/css/dashboard.css"
       ]
     },
     "css/bootstrap": {
+      "js": [
+        "/assets/runtime.js"
+      ],
       "css": [
         "/assets/css/bootstrap.css"
       ]

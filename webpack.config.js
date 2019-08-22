@@ -7,6 +7,7 @@ Encore
     .setPublicPath('/assets')
     // only needed for CDN's or sub-directory deploy
     //.setManifestKeyPrefix('build/')
+    .enableSingleRuntimeChunk()
 
     /*
      * ENTRY CONFIG
@@ -24,7 +25,7 @@ Encore
     // .addEntry('js/jquery-3.3.1', './assets/js/jquery-3.3.1.js')
     // .addEntry('js/popper', './assets/js/popper.js')
     .addEntry('js/bootstrap', './assets/js/bootstrap.js')
-    .addEntry('js/feather.min', './assets/js/feather.min.js')
+    // .addEntry('js/feather', './assets/js/feather.js')
 
     // will require an extra script tag for runtime.js
     // but, you probably want this, unless you're building a single-page app
@@ -44,7 +45,5 @@ Encore
 // uncomment if you're having problems with a jQuery plugin
 //.autoProvidejQuery()
 ;
-
-var Encore = require('@symfony/webpack-encore');
 
 module.exports = Encore.getWebpackConfig();

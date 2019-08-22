@@ -22,9 +22,14 @@ class BrandController extends AbstractController
      *
      * @Route("", name="admin_brands", methods={"GET"})
      */
-    public function index(): Response
+    public function index(Request $request): Response
     {
-        $brands = $this->getDoctrine()->getRepository(Brand::class)->findAll();
+        $page = $request->query->getInt('page', 1) ?: 1;  // If string given returns 0, we have to set it to 1
+
+        $brands = $this->getDoctrine()->getRepository(Brand::class)
+            ->findAllPaginated($page, 20);
+
+        $brands->setCustomParameters(['align' => 'center']);
 
         return $this->render('admin/brand/index.html.twig', [
             'brands' => $brands

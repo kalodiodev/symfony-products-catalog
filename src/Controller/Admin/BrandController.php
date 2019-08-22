@@ -93,4 +93,26 @@ class BrandController extends AbstractController
             'brand' => $brand
         ]);
     }
+
+    /**
+     * Delete Brand
+     *
+     * @Route("/{id}/delete", name="admin_brands_delete", methods={"POST"})
+     */
+    public function destroy(Brand $brand, Request $request): Response
+    {
+        if (!$this->isCsrfTokenValid('delete', $request->request->get('token'))) {
+            $this->addFlash('error', 'messages.error.token_mismatch');
+
+            return $this->redirectToRoute('admin_brands_update', ['id' => $brand->getId()]);
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($brand);
+        $em->flush();
+
+        $this->addFlash('success', 'admin.brands.flash.success.deleted');
+
+        return $this->redirectToRoute('admin_brands');
+    }
 }

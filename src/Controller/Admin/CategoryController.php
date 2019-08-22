@@ -102,7 +102,7 @@ class CategoryController extends AbstractController
     public function destroy(Category $category, Request $request): Response
     {
         if (!$this->isCsrfTokenValid('delete', $request->request->get('token'))) {
-            $this->addFlash('error', 'admin.categories.flash.error.token_mismatch');
+            $this->addFlash('error', 'messages.error.token_mismatch');
 
             return $this->redirectToRoute('admin_categories_update', ['id' => $category->getId()]);
         }

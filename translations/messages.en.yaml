@@ -77,16 +77,30 @@ admin:
       head:
         title: Admin - Users
       title: Users
+    edit:
+      head:
+        title: Admin - Edit User
+      title: Update User
     table:
       id: ID
       name: Name
       email: Email
       action: Action
+    form:
+      name:
+        label: User Name
+        placeholder: Enter user name
+      email:
+        label: User Email
+        placeholder: Enter user email
     button:
       add: Add User
       edit: Edit
       delete: Delete User
       save: Save User
+    flash:
+      success:
+        updated: User Updated!
 
   products:
     index:

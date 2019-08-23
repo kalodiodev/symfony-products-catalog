@@ -1,0 +1,32 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}{{ 'admin.users.edit.head.title'|trans }}{% endblock %}
+
+{% block body %}
+
+    <h1>{{ 'admin.users.edit.title'|trans }}</h1>
+
+    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+        <div class="form-group">
+            <label for="user_name">{{ 'admin.users.form.name.label'|trans }}</label>
+            {{ form_widget(form.name, {'attr': {'class': 'form-control' ~ (form_errors(form.name) ? ' is-invalid' : '') }}) }}
+            <div class="invalid-feedback">
+                {% if form.name.vars['errors']|length > 0 %}
+                    {{ form.name.vars['errors'][0].message }}
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="user_email">{{ 'admin.users.form.email.label'|trans }}</label>
+            {{ form_widget(form.email, {'attr': {'class': 'form-control' ~ (form_errors(form.email) ? ' is-invalid' : '') }}) }}
+            <div class="invalid-feedback">
+                {% if form.email.vars['errors']|length > 0 %}
+                    {{ form.email.vars['errors'][0].message }}
+                {% endif %}
+            </div>
+        </div>
+
+        {{ form_widget(form.save, {'attr': {'class': 'btn btn-primary'}}) }}
+    {{ form_end(form) }}
+{% endblock %}

@@ -1,6 +1,6 @@
 {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
 <div class="form-group">
-    <label for="name">{{ 'admin.brands.form.name.label'|trans }}</label>
+    <label for="brand_name">{{ 'admin.brands.form.name.label'|trans }}</label>
     {{ form_widget(form.name, {'attr': {'class': 'form-control' ~ (form_errors(form.name) ? ' is-invalid' : '') }}) }}
     <div class="invalid-feedback">
         {% if form.name.vars['errors']|length > 0 %}
@@ -10,7 +10,7 @@
 </div>
 
 <div class="form-group">
-    <label for="details">{{ 'admin.brands.form.details.label'|trans }}</label>
+    <label for="brand_details">{{ 'admin.brands.form.details.label'|trans }}</label>
     {{ form_widget(form.details, {'attr': {'class': 'form-control' ~ (form_errors(form.details) ? ' is-invalid' : '') }}) }}
     <div class="invalid-feedback">
         {% if form.details.vars['errors']|length > 0 %}
@@ -20,7 +20,7 @@
 </div>
 
 <div class="form-group">
-    <label for="name">{{ 'admin.brands.form.slug.label'|trans }}</label>
+    <label for="brand_slug">{{ 'admin.brands.form.slug.label'|trans }}</label>
     {{ form_widget(form.slug, {'attr':{'class': 'form-control' ~ (form_errors(form.slug) ? ' is-invalid' : '') }}) }}
     <div class="invalid-feedback">
         {% if form.slug.vars['errors']|length > 0 %}

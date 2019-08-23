@@ -29,6 +29,7 @@ admin:
     categories: Categories
     brands: Brands
     products: Products
+    users: Users
     options: Options
     frontpage: Front
 
@@ -70,6 +71,22 @@ admin:
         created: Brand Created!
         updated: Brand Updated!
         deleted: Brand Deleted!
+
+  users:
+    index:
+      head:
+        title: Admin - Users
+      title: Users
+    table:
+      id: ID
+      name: Name
+      email: Email
+      action: Action
+    button:
+      add: Add User
+      edit: Edit
+      delete: Delete User
+      save: Save User
 
   products:
     index:

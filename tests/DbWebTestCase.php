@@ -2,19 +2,25 @@
 
 namespace App\Tests;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Doctrine\ORM\EntityManager;
 use Symfony\Component\BrowserKit\Cookie;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 abstract class DbWebTestCase extends WebTestCase
 {
     /**
      * Test client
+     *
+     * @var KernelBrowser
      */
     protected $client;
 
     /**
      * Entity manager
+     *
+     * @var EntityManager
      */
     protected $entityManager;
 

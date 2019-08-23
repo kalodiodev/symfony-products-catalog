@@ -4,11 +4,13 @@ namespace App\Controller\Admin;
 
 use App\Entity\User;
 use App\Form\UserType;
-use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
  * Controller used to manage users
@@ -35,31 +37,86 @@ class UserController extends AbstractController
      * Edit and Update user
      *
      * @Route("/{id}/edit", name="admin_users_update", methods={"GET","POST"})
+     * @Route("/{id}/password", name="admin_users_update_password", methods={"POST"})
      */
-    public function update(User $user, EntityManagerInterface $em, Request $request): Response
+    public function update(User $user, Request $request, UserPasswordEncoderInterface $encoder): Response
     {
-        $form = $this->createForm(UserType::class, $user, [
-            'action' => $this->generateUrl('admin_users_update', ['id' => $user->getId()]),
-            'method' => 'POST'
-        ]);
+        $infoForm = $this->userForm($user, 'admin_users_update', UserType::INFO_ONLY);
+        $passwordForm = $this->userForm($user, 'admin_users_update_password', UserType::PASSWORD_ONLY);
 
-        $form->handleRequest($request);
+        // User Info Update submitted
+        if ($request->attributes->get('_route') == 'admin_users_update') {
+            $infoForm->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $user->setName($request->request->get('user')['name']);
-            $user->setEmail($request->request->get('user')['email']);
+            if ($infoForm->isSubmitted() && $infoForm->isValid()) {
+                return $this->handleUpdateUser($user, $request, $infoForm, $encoder);
+            }
+        }
 
-            $em->persist($user);
-            $em->flush();
+        // User Password Update Submitted
+        if ($request->attributes->get('_route') == 'admin_users_update_password') {
+            $passwordForm->handleRequest($request);
 
-            $this->addFlash('success', 'admin.users.flash.success.updated');
-
-            return $this->redirectToRoute('admin_users');
+            if ($passwordForm->isSubmitted() && $passwordForm->isValid()) {
+                return $this->handleUpdateUser($user, $request, $passwordForm, $encoder);
+            }
         }
 
         return $this->render('admin/user/update.html.twig', [
-            'form' => $form->createView(),
+            'form' => $infoForm->createView(),
+            'passwordForm' => $passwordForm->createView(),
             'user' => $user
+        ]);
+    }
+
+    /**
+     * Update User info
+     *
+     * @param User $user
+     * @param Request $request
+     * @param FormInterface $form
+     * @param UserPasswordEncoderInterface $encoder
+     * @return RedirectResponse
+     */
+    protected function handleUpdateUser(User $user, Request $request, FormInterface $form, UserPasswordEncoderInterface $encoder)
+    {
+        $mode = $form->getconfig()->getOption('mode');
+
+        $em = $this->getDoctrine()->getManager();
+
+        if($mode == UserType::INFO_ONLY || $mode == UserType::ALL) {
+            $user->setName($request->request->get('user')['name']);
+            $user->setEmail($request->request->get('user')['email']);
+        }
+
+        if($mode == UserType::PASSWORD_ONLY || $mode == UserType::PASSWORD_ONLY) {
+            $user->setPassword($encoder->encodePassword($user, $request->request->get('user')['password']['first']));
+        }
+
+        $em->persist($user);
+        $em->flush();
+
+        $this->addFlash('success', 'admin.users.flash.success.updated');
+
+        return $this->redirectToRoute('admin_users');
+    }
+
+    /**
+     * Create User info form
+     *
+     * @param User $user
+     * @param string $mode
+     * @return \Symfony\Component\Form\FormInterface
+     */
+    protected function userForm(User $user, $route, $mode = UserType::INFO_ONLY)
+    {
+        $submitLabel = $mode == UserType::PASSWORD_ONLY ? 'admin.users.button.update_password' : 'admin.users.button.save';
+
+        return $this->createForm(UserType::class, $user, [
+            'action' => $this->generateUrl($route, ['id' => $user->getId()]),
+            'method' => 'POST',
+            'mode' => $mode,
+            'submit_label' => $submitLabel
         ]);
     }
 }

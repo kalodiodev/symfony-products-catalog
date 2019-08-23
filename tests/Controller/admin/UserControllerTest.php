@@ -64,6 +64,32 @@ class UserControllerTest extends DbWebTestCase
         $this->assertSame($this->userFormData()['user[email]'], $user->getEmail());
     }
 
+    /** @test */
+    public function a_guest_cannot_update_password_of_user()
+    {
+        $this->client->request('POST', '/admin/users/1/password');
+
+        $this->assertResponseRedirects('/login');
+    }
+
+    /** @test */
+    public function a_user_can_update_password_of_user()
+    {
+        $this->logIn();
+
+        $this->client->request('GET', '/admin/users/1/edit');
+        $this->client->submitForm('Update Password', [
+            'user[password][first]' => 'password',
+            'user[password][second]' => 'password'
+        ]);
+
+        $this->assertResponseRedirects('/admin/users');
+
+        $user = $this->entityManager->getRepository(User::class)->find(1);
+
+        $this->assertNotNull($user);
+    }
+
     private function userFormData($overrides = [])
     {
         return array_merge([

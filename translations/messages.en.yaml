@@ -93,11 +93,16 @@ admin:
       email:
         label: User Email
         placeholder: Enter user email
+      password:
+        label: User Password
+      password_confirm:
+        label: Confirm Password
     button:
       add: Add User
       edit: Edit
       delete: Delete User
       save: Save User
+      update_password: Update Password
     flash:
       success:
         updated: User Updated!

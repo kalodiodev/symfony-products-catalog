@@ -90,6 +90,47 @@ class UserControllerTest extends DbWebTestCase
         $this->assertNotNull($user);
     }
 
+    /** @test */
+    public function a_guest_cannot_create_a_user()
+    {
+        $this->client->request('GET', '/admin/users/create');
+
+        $this->assertResponseRedirects('/login');
+    }
+
+    /** @test */
+    public function a_user_can_create_a_user()
+    {
+        $this->logIn();
+
+        $this->client->request('GET', '/admin/users/create');
+
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorTextContains('h1', 'Create User');
+        $this->assertSelectorExists('form');
+    }
+
+    /** @test */
+    public function a_user_can_store_a_user()
+    {
+        $this->login();
+
+        $this->client->catchExceptions(false);
+
+        $this->client->request('GET', '/admin/users/create');
+        $this->client->submitForm('Save User', $this->userFormData([
+            'user[password][first]' => 'password',
+            'user[password][second]' => 'password'
+        ]));
+
+        $this->assertResponseRedirects('/admin/users');
+
+        $user = $this->entityManager->getRepository(User::class)->findOneBy(['name' => 'Jane Smith']);
+
+        $this->assertNotNull($user);
+        $this->assertSame('jane@example.com', $user->getEmail());
+    }
+
     private function userFormData($overrides = [])
     {
         return array_merge([

@@ -77,6 +77,10 @@ admin:
       head:
         title: Admin - Users
       title: Users
+    create:
+      head:
+        title: Admin - Create User
+      title: Create User
     edit:
       head:
         title: Admin - Edit User
@@ -105,6 +109,7 @@ admin:
       update_password: Update Password
     flash:
       success:
+        created: User Created!
         updated: User Updated!
 
   products:

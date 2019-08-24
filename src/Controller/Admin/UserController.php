@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\User;
 use App\Form\UserType;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -34,6 +35,29 @@ class UserController extends AbstractController
     }
 
     /**
+     * @Route("/create", name="admin_users_create", methods={"GET", "POST"})
+     */
+    public function create(Request $request, EntityManagerInterface $em, UserPasswordEncoderInterface $encoder): Response
+    {
+        $user = new User();
+        $form = $this->userForm($user, 'admin_users_create', UserType::ALL);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->handleSaveOrUpdateUser(
+                $user, $request, $form, $encoder, 'admin.users.flash.success.created'
+            );
+
+            return $this->redirectToRoute('admin_users');
+        }
+
+        return $this->render('admin/user/create.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+
+    /**
      * Edit and Update user
      *
      * @Route("/{id}/edit", name="admin_users_update", methods={"GET","POST"})
@@ -49,7 +73,9 @@ class UserController extends AbstractController
             $infoForm->handleRequest($request);
 
             if ($infoForm->isSubmitted() && $infoForm->isValid()) {
-                return $this->handleUpdateUser($user, $request, $infoForm, $encoder);
+                return $this->handleSaveOrUpdateUser(
+                    $user, $request, $infoForm, $encoder, 'admin.users.flash.success.updated'
+                );
             }
         }
 
@@ -58,7 +84,9 @@ class UserController extends AbstractController
             $passwordForm->handleRequest($request);
 
             if ($passwordForm->isSubmitted() && $passwordForm->isValid()) {
-                return $this->handleUpdateUser($user, $request, $passwordForm, $encoder);
+                return $this->handleSaveOrUpdateUser(
+                    $user, $request, $passwordForm, $encoder, 'admin.users.flash.success.updated'
+                );
             }
         }
 
@@ -76,12 +104,16 @@ class UserController extends AbstractController
      * @param Request $request
      * @param FormInterface $form
      * @param UserPasswordEncoderInterface $encoder
+     * @param string $successMsg
      * @return RedirectResponse
      */
-    protected function handleUpdateUser(User $user, Request $request, FormInterface $form, UserPasswordEncoderInterface $encoder)
+    protected function handleSaveOrUpdateUser(User $user,
+                                              Request $request,
+                                              FormInterface $form,
+                                              UserPasswordEncoderInterface $encoder,
+                                              $successMsg)
     {
         $mode = $form->getconfig()->getOption('mode');
-
         $em = $this->getDoctrine()->getManager();
 
         if($mode == UserType::INFO_ONLY || $mode == UserType::ALL) {
@@ -96,7 +128,7 @@ class UserController extends AbstractController
         $em->persist($user);
         $em->flush();
 
-        $this->addFlash('success', 'admin.users.flash.success.updated');
+        $this->addFlash('success', $successMsg);
 
         return $this->redirectToRoute('admin_users');
     }

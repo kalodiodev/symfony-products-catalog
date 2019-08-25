@@ -131,11 +131,48 @@ class UserControllerTest extends DbWebTestCase
         $this->assertSame('jane@example.com', $user->getEmail());
     }
 
-    private function userFormData($overrides = [])
+    /**
+     * @test
+     * @dataProvider invalidDataOverridesProvider
+     */
+    public function user_create_validation($field, $value, $errorMsg)
     {
-        return array_merge([
+        $this->logIn();
+
+        $this->client->request('GET', '/admin/users/create');
+        $this->client->submitForm('Save User', $this->userFormData([$field => $value], true));
+
+        $this->assertRouteSame('admin_users_create');
+
+        $count = $this->entityManager->getRepository(User::class)->count([]);
+        $this->assertEquals(1, $count, $errorMsg);
+    }
+
+    private function userFormData($overrides = [], $withPassword = false)
+    {
+        $data = [
             'user[name]' => 'Jane Smith',
             'user[email]' => 'jane@example.com'
-        ], $overrides);
+        ];
+
+        if ($withPassword) {
+            $data['user[password][first]'] = 'password';
+            $data['user[password][second]'] = 'password';
+        }
+
+        return array_merge($data, $overrides);
+    }
+
+    public function invalidDataOverridesProvider()
+    {
+        yield ['user[name]', '', 'User name cannot be empty'];
+        yield ['user[name]', 'a', 'User name min length'];
+        yield ['user[name]', $this->generateRandomString(193), 'User name max length'];
+        yield ['user[email]', '', 'User email cannot be empty'];
+        yield ['user[email]', 'text', 'User email should be an email'];
+        yield ['user[email]', 'test@example.com', 'User email should be unique'];
+        yield ['user[password][first]', '', 'Password is required'];
+        yield ['user[password][second]', '', 'Password should be confirmed'];
+        yield ['user[password][second]', 'wrongpassword', 'Passwords should match'];
     }
 }

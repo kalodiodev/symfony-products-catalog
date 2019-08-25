@@ -38,7 +38,7 @@
             {{ form_widget(passwordForm.password.first, {'attr': {'class': 'form-control' ~ (form_errors(passwordForm.password.first) ? ' is-invalid' : '') }}) }}
             <div class="invalid-feedback">
                 {% if passwordForm.password.first.vars['errors']|length > 0 %}
-                    {{ passwordForm.password.first.vars['errors'][0].message }}
+                    {{ passwordForm.password.first.vars['errors'][0].message|trans }}
                 {% endif %}
             </div>
         </div>
@@ -48,7 +48,7 @@
             {{ form_widget(passwordForm.password.second, {'attr': {'class': 'form-control' ~ (form_errors(passwordForm.password.second) ? ' is-invalid' : '') }}) }}
             <div class="invalid-feedback">
                 {% if passwordForm.password.second.vars['errors']|length > 0 %}
-                    {{ passwordForm.password.second.vars['errors'][0].message }}
+                    {{ passwordForm.password.second.vars['errors'][0].message|trans }}
                 {% endif %}
             </div>
         </div>

@@ -42,6 +42,7 @@ class UserType extends AbstractType
             $builder
                 ->add('password', RepeatedType::class, [
                     'type' => PasswordType::class,
+                    'invalid_message' => 'admin.users.validation.password_mismatch',
                 ]);
         }
 

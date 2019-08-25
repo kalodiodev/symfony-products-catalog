@@ -101,6 +101,9 @@ admin:
         label: User Password
       password_confirm:
         label: Confirm Password
+    validation:
+      password_mismatch: The password fields must match.
+
     button:
       add: Add User
       edit: Edit

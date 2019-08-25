@@ -9,6 +9,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -95,6 +96,37 @@ class UserController extends AbstractController
             'passwordForm' => $passwordForm->createView(),
             'user' => $user
         ]);
+    }
+
+    /**
+     * @Route("/{id}/delete", name="admin_users_delete", methods={"POST"})
+     */
+    public function destroy(User $user, Request $request): Response
+    {
+        if (!$this->isCsrfTokenValid('delete', $request->request->get('token'))) {
+            $this->addFlash('error', 'messages.error.token_mismatch');
+
+            return $this->redirectToRoute('admin_users_delete', ['id' => $user->getId()]);
+        }
+
+        $authId = $this->getUser()->getId();
+        $userId = $user->getId();
+
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($user);
+        $em->flush();
+
+        if ($authId == $userId) {
+            $this->get('session')->clear();
+            $session = new Session();
+            $session->invalidate();
+
+            return $this->redirectToRoute('app_login');
+        }
+
+        $this->addFlash('success', 'admin.users.flash.success.deleted');
+
+        return $this->redirectToRoute('admin_users');
     }
 
     /**

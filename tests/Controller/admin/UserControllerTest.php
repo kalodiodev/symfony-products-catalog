@@ -24,7 +24,7 @@ class UserControllerTest extends DbWebTestCase
 
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('h1', 'Users');
-        $this->assertCount(1, $crawler->filter('tbody > tr'));
+        $this->assertCount(2, $crawler->filter('tbody > tr'));
     }
 
     /** @test */
@@ -145,14 +145,52 @@ class UserControllerTest extends DbWebTestCase
         $this->assertRouteSame('admin_users_create');
 
         $count = $this->entityManager->getRepository(User::class)->count([]);
-        $this->assertEquals(1, $count, $errorMsg);
+        $this->assertEquals(2, $count, $errorMsg);
+    }
+
+    /** @test */
+    public function a_guest_cannot_delete_a_user()
+    {
+        $this->client->request('POST', '/admin/users/1/delete');
+
+        $this->assertResponseRedirects('/login');
+    }
+
+    /** @test */
+    public function a_user_can_delete_a_user()
+    {
+        $this->logIn();
+
+        $this->client->request('GET', '/admin/users/2/edit');
+        $this->client->submitForm('Delete User');
+
+        $this->assertResponseRedirects('/admin/users');
+
+        $user = $this->entityManager->getRepository(User::class)->find(2);
+
+        $this->assertNull($user);
+    }
+
+    /** @test */
+    public function user_logged_out_if_deletes_himself()
+    {
+        $this->logIn();
+
+        $this->client->request('GET', '/admin/users/1/edit');
+        $this->client->submitForm('Delete User');
+
+        $this->assertResponseRedirects('/login');
+
+        $user = $this->entityManager->getRepository(User::class)->find(1);
+
+        $this->assertNull($user);
     }
 
     private function userFormData($overrides = [], $withPassword = false)
     {
         $data = [
             'user[name]' => 'Jane Smith',
-            'user[email]' => 'jane@example.com'
+            'user[email]' => 'smith@example.com'
         ];
 
         if ($withPassword) {

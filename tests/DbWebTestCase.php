@@ -2,6 +2,7 @@
 
 namespace App\Tests;
 
+use App\Entity\User;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -53,10 +54,14 @@ abstract class DbWebTestCase extends WebTestCase
     /**
      * Login User
      *
-     * @param string $email
+     * @param User|null $user
      */
-    protected function logIn($email = 'test@example.com')
+    protected function logIn(User $user = null)
     {
+        if ($user == null) {
+            $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => 'test@example.com']);
+        }
+
         $session = $this->client->getContainer()->get('session');
 
         $firewallName = 'main';
@@ -66,7 +71,7 @@ abstract class DbWebTestCase extends WebTestCase
 
         // you may need to use a different token class depending on your application.
         // for example, when using Guard authentication you must instantiate PostAuthenticationGuardToken
-        $token = new UsernamePasswordToken($email, null, $firewallName, ['ROLE_ADMIN']);
+        $token = new UsernamePasswordToken($user, null, $firewallName, ['ROLE_ADMIN']);
         $session->set('_security_'.$firewallContext, serialize($token));
         $session->save();
 

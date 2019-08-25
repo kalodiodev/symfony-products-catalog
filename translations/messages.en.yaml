@@ -114,6 +114,7 @@ admin:
       success:
         created: User Created!
         updated: User Updated!
+        deleted: User Deleted!
 
   products:
     index:

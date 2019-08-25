@@ -153,7 +153,7 @@ class UserController extends AbstractController
             $user->setEmail($request->request->get('user')['email']);
         }
 
-        if($mode == UserType::PASSWORD_ONLY || $mode == UserType::PASSWORD_ONLY) {
+        if($mode == UserType::PASSWORD_ONLY || $mode == UserType::ALL) {
             $user->setPassword($encoder->encodePassword($user, $request->request->get('user')['password']['first']));
         }
 

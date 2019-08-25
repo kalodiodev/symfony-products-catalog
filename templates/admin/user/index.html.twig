@@ -31,6 +31,11 @@
             {% endfor %}
             </tbody>
         </table>
+
+        <div class="justify-content-center">
+            {{ knp_pagination_render(users) }}
+        </div>
+
         <a class="btn btn-primary" href="{{ path('admin_users_create') }}">{{ 'admin.users.button.add'|trans }}</a>
     </div>
 {% endblock %}

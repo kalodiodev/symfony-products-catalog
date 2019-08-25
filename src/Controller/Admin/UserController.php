@@ -26,9 +26,14 @@ class UserController extends AbstractController
      *
      * @Route("", name="admin_users", methods={"GET"})
      */
-    public function index(): Response
+    public function index(Request $request): Response
     {
-        $users = $this->getDoctrine()->getRepository(User::class)->findAll();
+        $page = $request->query->getInt('page', 1) ?: 1;
+
+        $users = $this->getDoctrine()->getRepository(User::class)
+            ->findAllPaginated($page, 20);
+
+        $users->setCustomParameters(['align' => 'center']);
 
         return $this->render('admin/user/index.html.twig', [
             'users' => $users

@@ -31,6 +31,9 @@
             {% endfor %}
             </tbody>
         </table>
+
+        {{ knp_pagination_render(categories) }}
+
         <a class="btn btn-primary" href="{{ path('admin_categories_create') }}">
             {{ 'admin.categories.button.add'|trans }}
         </a>

@@ -22,9 +22,14 @@ class CategoryController extends AbstractController
      *
      * @Route("", name="admin_categories", methods={"GET"})
      */
-    public function index(): Response
+    public function index(Request $request): Response
     {
-        $categories = $this->getDoctrine()->getRepository(Category::class)->findAll();
+        $page = $request->query->getInt('page', 1) ?: 1;
+
+        $categories = $this->getDoctrine()->getRepository(Category::class)
+            ->findAllPaginated($page, 20);
+
+        $categories->setCustomParameters(['align' => 'center']);
 
         return $this->render('admin/category/index.html.twig', [
             'categories' => $categories

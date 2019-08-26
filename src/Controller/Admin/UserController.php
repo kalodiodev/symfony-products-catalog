@@ -4,7 +4,6 @@ namespace App\Controller\Admin;
 
 use App\Entity\User;
 use App\Form\UserType;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -41,9 +40,11 @@ class UserController extends AbstractController
     }
 
     /**
+     * Create User
+     *
      * @Route("/create", name="admin_users_create", methods={"GET", "POST"})
      */
-    public function create(Request $request, EntityManagerInterface $em, UserPasswordEncoderInterface $encoder): Response
+    public function create(Request $request, UserPasswordEncoderInterface $encoder): Response
     {
         $user = new User();
         $form = $this->userForm($user, 'admin_users_create', UserType::ALL);
@@ -104,6 +105,8 @@ class UserController extends AbstractController
     }
 
     /**
+     * Delete User
+     *
      * @Route("/{id}/delete", name="admin_users_delete", methods={"POST"})
      */
     public function destroy(User $user, Request $request): Response
@@ -117,15 +120,10 @@ class UserController extends AbstractController
         $authId = $this->getUser()->getId();
         $userId = $user->getId();
 
-        $em = $this->getDoctrine()->getManager();
-        $em->remove($user);
-        $em->flush();
+        $this->deleteUser($user);
 
         if ($authId == $userId) {
-            $this->get('session')->clear();
-            $session = new Session();
-            $session->invalidate();
-
+            $this->clearSession();
             return $this->redirectToRoute('app_login');
         }
 
@@ -159,7 +157,9 @@ class UserController extends AbstractController
         }
 
         if($mode == UserType::PASSWORD_ONLY || $mode == UserType::ALL) {
-            $user->setPassword($encoder->encodePassword($user, $request->request->get('user')['password']['first']));
+            $user->setPassword(
+                $encoder->encodePassword($user, $request->request->get('user')['password']['first'])
+            );
         }
 
         $em->persist($user);
@@ -174,12 +174,15 @@ class UserController extends AbstractController
      * Create User info form
      *
      * @param User $user
+     * @param $route
      * @param string $mode
      * @return \Symfony\Component\Form\FormInterface
      */
     protected function userForm(User $user, $route, $mode = UserType::INFO_ONLY)
     {
-        $submitLabel = $mode == UserType::PASSWORD_ONLY ? 'admin.users.button.update_password' : 'admin.users.button.save';
+        $submitLabel = $mode == UserType::PASSWORD_ONLY ?
+            'admin.users.button.update_password' :
+            'admin.users.button.save';
 
         return $this->createForm(UserType::class, $user, [
             'action' => $this->generateUrl($route, ['id' => $user->getId()]),
@@ -187,5 +190,29 @@ class UserController extends AbstractController
             'mode' => $mode,
             'submit_label' => $submitLabel
         ]);
+    }
+
+    /**
+     * Clear Session
+     *
+     * Clear and create a new anonymous session
+     */
+    protected function clearSession(): void
+    {
+        $this->get('session')->clear();
+        $session = new Session();
+        $session->invalidate();
+    }
+
+    /**
+     * Delete given user from database
+     *
+     * @param User $user
+     */
+    public function deleteUser(User $user): void
+    {
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($user);
+        $em->flush();
     }
 }

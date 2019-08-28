@@ -28,6 +28,7 @@ admin:
     dashboard: Dashboard
     categories: Categories
     brands: Brands
+    attributes: Attributes
     products: Products
     users: Users
     options: Options
@@ -71,6 +72,22 @@ admin:
         created: Brand Created!
         updated: Brand Updated!
         deleted: Brand Deleted!
+
+  attributes:
+    index:
+      head:
+        title: Admin - Attributes
+      title: Attributes
+    table:
+      id: ID
+      name: Name
+      description: Description
+      action: Action
+    button:
+      add: Add Attribute
+      edit: Edit
+      delete: Delete Attribute
+      save: Save Attribute
 
   users:
     index:

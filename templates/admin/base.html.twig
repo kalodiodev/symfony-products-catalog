@@ -50,6 +50,13 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link {% if app.request.get('_route') == 'admin_attributes' %} active {% endif %}>"
+                           href="{{ path('admin_attributes') }}">
+                            <span data-feather="file"></span>
+                            {{ 'admin.menu.attributes'|trans }}
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link {% if app.request.get('_route') == 'admin_products' %} active {% endif %}>"
                            href="{{ path('admin_products') }}">
                             <span data-feather="shopping-cart"></span>

@@ -46,6 +46,23 @@ class AttributeControllerTest extends DbWebTestCase
         $this->assertSelectorExists('form');
     }
 
+    /**
+     * @test
+     * @dataProvider invalidDataOverridesProvider
+     */
+    public function attribute_create_validation($field, $value, $errorMsg)
+    {
+        $this->logIn();
+
+        $this->client->request('GET', '/admin/attributes/create');
+        $this->client->submitForm('Save Attribute', $this->attributeFormData([$field => $value]));
+
+        $this->assertRouteSame('admin_attributes_create');
+
+        $count = $this->entityManager->getRepository(Attribute::class)->count([]);
+        $this->assertEquals(3, $count, $errorMsg);
+    }
+
     /** @test */
     public function a_user_can_store_an_attribute()
     {
@@ -102,6 +119,15 @@ class AttributeControllerTest extends DbWebTestCase
         $attribute = $this->entityManager->getRepository(Attribute::class)->find(1);
 
         $this->assertNull($attribute);
+    }
+
+    public function invalidDataOverridesProvider()
+    {
+        yield ['attribute[name]', '', 'Attribute name cannot be empty'];
+        yield ['attribute[name]', 'Color', 'Attribute name must be unique'];
+        yield ['attribute[name]', 'a', 'Attribute name min length'];
+        yield ['attribute[name]', $this->generateRandomString(193), 'Attribute name max length'];
+        yield ['attribute[description]', $this->generateRandomString(256), 'Attribute description max length'];
     }
 
     private function attributeFormData($overrides = [])

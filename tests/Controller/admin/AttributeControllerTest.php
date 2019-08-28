@@ -63,6 +63,24 @@ class AttributeControllerTest extends DbWebTestCase
         $this->assertSame($this->attributeFormData()['attribute[description]'], $attribute->getDescription());
     }
 
+    /** @test */
+    public function a_user_can_update_an_attribute()
+    {
+        $this->logIn();
+
+        $this->client->request('GET', '/admin/attributes/1/edit');
+        $this->client->submitForm('Save Attribute', $this->attributeFormData());
+
+        $this->assertResponseRedirects('/admin/attributes');
+
+        $attribute = $this->entityManager->getRepository(Attribute::class)->find(1);
+
+        $this->assertNotNull($attribute);
+        $this->assertSame($this->attributeFormData()['attribute[name]'], $attribute->getName());
+        $this->assertSame($this->attributeFormData()['attribute[description]'], $attribute->getDescription());
+        $this->assertEquals(3, $this->entityManager->getRepository(Attribute::class)->count([]));
+    }
+
     private function attributeFormData($overrides = [])
     {
         return array_merge([

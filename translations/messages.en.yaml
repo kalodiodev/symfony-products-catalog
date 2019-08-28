@@ -82,6 +82,10 @@ admin:
       head:
         title: Admin - Create Attribute
       title: Create Attribute
+    edit:
+      head:
+        title: Admin - Edit Attribute
+      title: Update Attribute
     table:
       id: ID
       name: Name

@@ -62,4 +62,35 @@ class AttributeController extends AbstractController
             'form' => $form->createView()
         ]);
     }
+
+    /**
+     * Edit - update an attribute
+     *
+     * @Route("/{id}/edit", name="admin_attributes_update", methods={"GET", "POST"})
+     */
+    public function update(Attribute $attribute, EntityManagerInterface $em, Request $request): Response
+    {
+        $form = $this->createForm(AttributeType::class, $attribute, [
+            'action' => $this->generateUrl('admin_attributes_update', ['id' => $attribute->getId()]),
+            'method' => 'POST'
+        ]);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $attribute = $form->getData();
+
+            $em->persist($attribute);
+            $em->flush();
+
+            $this->addFlash('success', 'admin.attributes.flash.success.updated');
+
+            return $this->redirectToRoute('admin_attributes');
+        }
+
+        return $this->render('admin/attribute/update.html.twig', [
+            'form' => $form->createView(),
+            'attribute' => $attribute
+        ]);
+    }
 }

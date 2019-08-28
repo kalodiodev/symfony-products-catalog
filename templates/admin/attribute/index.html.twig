@@ -23,7 +23,7 @@
                     <td>{{ attribute.description }}</td>
                     <td>
                         <a class="btn btn-sm btn-warning"
-                           href="#">
+                           href="{{ path('admin_attributes_update', {'id': attribute.id}) }}">
                             {{ 'admin.attributes.button.edit'|trans }}
                         </a>
                     </td>

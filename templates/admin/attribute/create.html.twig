@@ -1,0 +1,10 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}{{ 'admin.attributes.create.head.title'|trans }}{% endblock %}
+
+{% block body %}
+    <h1>{{ 'admin.attributes.create.title'|trans }}</h1>
+
+    {% include 'admin/attribute/_form.html.twig' %}
+
+{% endblock %}

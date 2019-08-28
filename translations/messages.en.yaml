@@ -78,16 +78,32 @@ admin:
       head:
         title: Admin - Attributes
       title: Attributes
+    create:
+      head:
+        title: Admin - Create Attribute
+      title: Create Attribute
     table:
       id: ID
       name: Name
       description: Description
       action: Action
+    form:
+      name:
+        label: Attribute Name
+        placeholder: Enter attribute name
+      description:
+        label: Attribute Description
+        placeholder: Enter attribute description
     button:
       add: Add Attribute
       edit: Edit
       delete: Delete Attribute
       save: Save Attribute
+    flash:
+      success:
+        created: Attribute Created!
+        updated: Attribute Updated!
+        deleted: Attribute Deleted!
 
   users:
     index:

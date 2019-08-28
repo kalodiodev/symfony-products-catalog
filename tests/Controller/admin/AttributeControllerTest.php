@@ -81,6 +81,29 @@ class AttributeControllerTest extends DbWebTestCase
         $this->assertEquals(3, $this->entityManager->getRepository(Attribute::class)->count([]));
     }
 
+    /** @test */
+    public function a_guest_cannot_delete_an_attribute()
+    {
+        $this->client->request('POST', '/admin/attributes/1/delete');
+
+        $this->assertResponseRedirects('/login');
+    }
+
+    /** @test */
+    public function a_user_can_delete_an_attribute()
+    {
+        $this->logIn();
+
+        $this->client->request('GET', '/admin/attributes/1/edit');
+        $this->client->submitForm('Delete Attribute');
+
+        $this->assertResponseRedirects('/admin/attributes');
+
+        $attribute = $this->entityManager->getRepository(Attribute::class)->find(1);
+
+        $this->assertNull($attribute);
+    }
+
     private function attributeFormData($overrides = [])
     {
         return array_merge([

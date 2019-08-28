@@ -4,6 +4,8 @@
 
 {% block body %}
 
+    {% include 'admin/attribute/_delete_form.html.twig' %}
+
     <h1>{{ 'admin.attributes.edit.title'|trans }}</h1>
 
     {% include 'admin/attribute/_form.html.twig' %}

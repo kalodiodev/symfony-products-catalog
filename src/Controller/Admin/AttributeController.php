@@ -93,4 +93,26 @@ class AttributeController extends AbstractController
             'attribute' => $attribute
         ]);
     }
+
+    /**
+     * Delete Attribute
+     *
+     * @Route("/{id}/delete", name="admin_attributes_delete", methods={"POST"})
+     */
+    public function destroy(Attribute $attribute, Request $request): Response
+    {
+        if (!$this->isCsrfTokenValid('delete', $request->request->get('token'))) {
+            $this->addFlash('error', 'message.error.token_mismatch');
+
+            return $this->redirectToRoute('admin_users_update', ['id' => $attribute->getId()]);
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($attribute);
+        $em->flush();
+
+        $this->addFlash('success', 'admin.attributes.flash.success.deleted');
+
+        return $this->redirectToRoute('admin_attributes');
+    }
 }

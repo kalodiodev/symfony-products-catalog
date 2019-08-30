@@ -26,4 +26,16 @@ class ProductController extends AbstractController
             'products' => $products
         ]);
     }
+
+    /**
+     * Show Product
+     *
+     * @Route("/{id}", name="admin_products_show", methods={"GET"})
+     */
+    public function show(Product $product)
+    {
+        return $this->render('admin/product/show.html.twig', [
+            'product' => $product
+        ]);
+    }
 }

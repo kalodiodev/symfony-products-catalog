@@ -158,6 +158,10 @@ admin:
       head:
         title: Admin - Products
       title: Products
+    show:
+      head:
+        title: Admin - Show Product
+      title: Product
     table:
       id: ID
       title: Title

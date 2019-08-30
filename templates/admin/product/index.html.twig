@@ -18,7 +18,7 @@
             <tbody>
                 {% for product in products %}
                     <tr>
-                        <td>{{ product.id }}</td>
+                        <td><a href="{{ path('admin_products_show', {'id': product.id}) }}">{{ product.id }}</a></td>
                         <td>{{ product.title }}</td>
                         <td>{{ product.description }}</td>
                         <td>

@@ -1,0 +1,32 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}{{ 'admin.products.show.head.title'|trans }}{% endblock %}
+
+{% block body %}
+    <h1>{{ product.title }}</h1>
+    <hr>
+
+    <div>
+        <div>
+            {{ product.id }}
+        </div>
+        <div>{{ product.title }}</div>
+        <div>{{ product.description }}</div>
+        <div>{{ product.price }}</div>
+
+        <div>
+            <h4>Categories</h4>
+            {% if product.categories.count > 0 %}
+            <ul>
+                {% for category in product.categories %}
+                    <li>{{ category.name }}</li>
+                {% endfor %}
+            </ul>
+            {% else %}
+                <p>No Categories</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <a class="btn btn-primary" href="{{ path('admin_products') }}">Back to Products</a>
+{% endblock %}

@@ -39,9 +39,15 @@ class Product
      */
     private $categories;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\ProductAttribute", mappedBy="product")
+     */
+    private $attributes;
+
     public function __construct()
     {
         $this->categories = new ArrayCollection();
+        $this->attributes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -106,6 +112,37 @@ class Product
     {
         if ($this->categories->contains($category)) {
             $this->categories->removeElement($category);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ProductAttribute[]
+     */
+    public function getAttributes(): Collection
+    {
+        return $this->attributes;
+    }
+
+    public function addAttribute(ProductAttribute $attribute): self
+    {
+        if (!$this->attributes->contains($attribute)) {
+            $this->attributes[] = $attribute;
+            $attribute->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAttribute(ProductAttribute $attribute): self
+    {
+        if ($this->attributes->contains($attribute)) {
+            $this->attributes->removeElement($attribute);
+            // set the owning side to null (unless already changed)
+            if ($attribute->getProduct() === $this) {
+                $attribute->setProduct(null);
+            }
         }
 
         return $this;

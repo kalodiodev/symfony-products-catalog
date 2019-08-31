@@ -162,14 +162,43 @@ admin:
       head:
         title: Admin - Show Product
       title: Product
+    create:
+      head:
+        title: Admin - Create Product
+      title: Create Product
     table:
       id: ID
       title: Title
       description: Description
       action: Action
+    form:
+      title:
+        label: Title
+        placeholder: Enter title of product
+      description:
+        label: Description
+        placeholder: Enter description of product
+      price:
+        label: Price
+        placeholder: Enter price of product
+      categories:
+        label: Categories
+      attributes:
+        label: Attributes
+      attribute:
+        label: Attribute
+      attribute_value:
+        label: Value
+        placeholder: Enter value of attibute
     button:
       edit: Edit
       add: Add Product
+      save: Save Product
+      add_attribute: Add Attribute
+      remove_attribute: Remove
+    flash:
+      success:
+        created: Product Created!
 
   categories:
     index:

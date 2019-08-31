@@ -3,6 +3,9 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Product;
+use App\Form\ProductType;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -24,6 +27,35 @@ class ProductController extends AbstractController
 
         return $this->render('admin/product/index.html.twig', [
             'products' => $products
+        ]);
+    }
+
+    /**
+     * @Route("/create", name="admin_products_create", methods={"GET", "POST"})
+     */
+    public function create(Request $request, EntityManagerInterface $em)
+    {
+        $product = new Product();
+
+        $form = $this->createForm(ProductType::class, $product, [
+            'action' => $this->generateUrl('admin_products_create'),
+            'method' => 'POST',
+        ]);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $em->persist($product);
+            $em->flush();
+
+            $this->addFlash('success', 'admin.products.flash.success.created');
+
+            return $this->redirectToRoute('admin_products');
+        }
+
+        return $this->render('admin/product/create.html.twig', [
+            'form' => $form->createView()
         ]);
     }
 

@@ -28,6 +28,6 @@
                 {% endfor %}
             </tbody>
         </table>
-        <a class="btn btn-primary" href="#">{{ 'admin.products.button.add'|trans }}</a>
+        <a class="btn btn-primary" href="{{ path('admin_products_create') }}">{{ 'admin.products.button.add'|trans }}</a>
     </div>
 {% endblock %}

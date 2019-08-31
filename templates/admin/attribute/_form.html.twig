@@ -10,7 +10,7 @@
 </div>
 
 <div class="form-group">
-    <label for="attribute_description">{{ 'admin.brands.form.details.label'|trans }}</label>
+    <label for="attribute_description">{{ 'admin.attributes.form.description.label'|trans }}</label>
     {{ form_widget(form.description, {'attr': {'class': 'form-control' ~ (form_errors(form.description) ? ' is-invalid' : '') }}) }}
     <div class="invalid-feedback">
         {% if form.description.vars['errors']|length > 0 %}

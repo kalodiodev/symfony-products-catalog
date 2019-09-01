@@ -60,6 +60,33 @@ class ProductController extends AbstractController
     }
 
     /**
+     * @Route("/{id}/edit", name="admin_products_update", methods={"GET", "POST"})
+     */
+    public function update(Product $product, Request $request, EntityManagerInterface $em)
+    {
+        $form = $this->createForm(ProductType::class, $product, [
+            'action' => $this->generateUrl('admin_products_update', ['id' => $product->getId()]),
+            'method' => 'POST',
+        ]);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->persist($product);
+            $em->flush();
+
+            $this->addFlash('success', 'admin.products.flash.success.updated');
+
+            return $this->redirectToRoute('admin_products');
+        }
+
+        return $this->render('admin/product/update.html.twig', [
+            'product' => $product,
+            'form' => $form->createView()
+        ]);
+    }
+
+    /**
      * Show Product
      *
      * @Route("/{id}", name="admin_products_show", methods={"GET"})

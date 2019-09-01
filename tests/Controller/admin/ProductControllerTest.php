@@ -91,6 +91,54 @@ class ProductControllerTest extends DbWebTestCase
         $this->assertSame('Test Product Description', $product->getDescription());
     }
 
+    /** @test */
+    public function a_guest_cannot_edit_a_product()
+    {
+        $this->client->request('GET', '/admin/products/1/edit');
+
+        $this->assertResponseRedirects('/login');
+    }
+
+    /** @test */
+    public function a_user_can_edit_a_product()
+    {
+        $this->logIn();
+
+        $this->client->request('GET', '/admin/products/1/edit');
+
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorTextContains('h1', 'Update Product');
+        $this->assertSelectorExists('form');
+    }
+
+    /** @test */
+    public function a_user_can_update_a_product()
+    {
+        $this->logIn();
+
+        $crawler = $this->client->request('GET', '/admin/products/1/edit');
+        $form = $crawler->selectButton('Save Product')->form();
+
+        $values = $this->productFormData();
+        $values['product']['_token'] = $form['product[_token]']->getValue();
+
+        $this->client->request('POST', '/admin/products/1/edit', $values);
+
+        $this->assertResponseRedirects('/admin/products');
+
+        $product = $this->entityManager->getRepository(Product::class)->find(1);
+
+        $this->assertNotNull($product);
+        $this->assertCount(1, $product->getAttributes());
+        $this->assertSame('Test Product', $product->getTitle());
+        $this->assertSame('Test Product Description', $product->getDescription());
+        $this->assertEquals(100, $product->getPrice());
+
+        $attribute = $product->getAttributes()[0];
+        $this->assertSame(1, $attribute->getAttribute()->getId());
+        $this->assertSame('Red', $attribute->getValue());
+    }
+
     /**
      * @test
      * @dataProvider invalidFormData

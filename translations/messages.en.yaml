@@ -166,6 +166,10 @@ admin:
       head:
         title: Admin - Create Product
       title: Create Product
+    edit:
+      head:
+        title: Admin - Edit Product
+      title: Update Product
     table:
       id: ID
       title: Title
@@ -199,6 +203,7 @@ admin:
     flash:
       success:
         created: Product Created!
+        updated: Product Updated!
 
   categories:
     index:

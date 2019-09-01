@@ -1,0 +1,91 @@
+{% import _self as formMacros %}
+    {% macro printAttributesRow(attributesForm) %}
+        <div class="attribute-item card mb-3">
+            <div class="card-body" style="background: #cbd3da">
+                <h5 class="card-title">{{ 'admin.products.form.attribute.label'|trans }}</h5>
+                <div class="form-group">
+                    <label for="category_name">{{ 'admin.products.form.attributes.label'|trans }}</label>
+                    {{ form_widget(attributesForm.attribute, {'attr': {'class': 'form-control' ~ (form_errors(attributesForm.attribute) ? ' is-invalid' : '') }}) }}
+                    <div class="invalid-feedback">
+                        {% if attributesForm.attribute.vars['errors']|length > 0 %}
+                            {{ attributesForm.attribute.vars['errors'][0].message }}
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="category_name">{{ 'admin.products.form.attribute_value.label'|trans }}</label>
+                    {{ form_widget(attributesForm.value, {'attr': {'class': 'form-control' ~ (form_errors(attributesForm.value) ? ' is-invalid' : '') }}) }}
+                    <div class="invalid-feedback">
+                        {% if attributesForm.value.vars['errors']|length > 0 %}
+                            {{ attributesForm.value.vars['errors'][0].message }}
+                        {% endif %}
+                    </div>
+                </div>
+
+                <a href="#" class="remove-attribute btn btn-danger" style="float: right">
+                    {{ 'admin.products.button.remove_attribute'|trans }}
+                </a>
+            </div>
+        </div>
+    {% endmacro %}
+
+
+{{ form_start(form) }}
+
+<div class="form-group">
+    <label for="category_name">{{ 'admin.products.form.title.label'|trans }}</label>
+    {{ form_widget(form.title, {'attr': {'class': 'form-control' ~ (form_errors(form.title) ? ' is-invalid' : '') }}) }}
+    <div class="invalid-feedback">
+        {% if form.title.vars['errors']|length > 0 %}
+            {{ form.title.vars['errors'][0].message }}
+        {% endif %}
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="category_name">{{ 'admin.products.form.description.label'|trans }}</label>
+    {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
+    <div class="invalid-feedback">
+        {% if form.description.vars['errors']|length > 0 %}
+            {{ form.description.vars['errors'][0].message }}
+        {% endif %}
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="category_name">{{ 'admin.products.form.price.label'|trans }}</label>
+    {{ form_widget(form.price, {'attr': {'class': 'form-control'}}) }}
+    <div class="invalid-feedback">
+        {% if form.price.vars['errors']|length > 0 %}
+            {{ form.price.vars['errors'][0].message }}
+        {% endif %}
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="category_name">{{ 'admin.products.form.categories.label'|trans }}</label>
+    {{ form_widget(form.categories, {'attr': {'class': 'form-control'}}) }}
+    <div class="invalid-feedback">
+        {% if form.categories.vars['errors']|length > 0 %}
+            {{ form.categories.vars['errors'][0].message }}
+        {% endif %}
+    </div>
+</div>
+
+<h3>{{ 'admin.products.form.attributes.label'|trans }}</h3>
+<div class="attributes-wrapper"
+     data-prototype="{{ formMacros.printAttributesRow(form.attributes.vars.prototype)|e('html_attr') }}"
+     data-index="{{ form.attributes|length }}">
+
+    {% for attributesForm in form.attributes %}
+        {{ formMacros.printAttributesRow(attributesForm) }}
+    {% endfor %}
+
+    <a href="#" id="addAttributeBtn" class="btn btn-danger">{{ 'admin.products.button.add_attribute'|trans }}</a>
+</div>
+
+{{ form_widget(form.save) }}
+
+
+{{ form_end(form) }}

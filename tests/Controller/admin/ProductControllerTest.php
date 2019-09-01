@@ -76,9 +76,56 @@ class ProductControllerTest extends DbWebTestCase
         $crawler = $this->client->request('GET', '/admin/products/create');
         $form = $crawler->selectButton('Save Product')->form();
 
-        $values = [
+        $values = $this->productFormData();
+        $values['product']['_token'] = $form['product[_token]']->getValue();
+
+        $this->client->request('POST', '/admin/products/create', $values);
+
+        $this->assertResponseRedirects('/admin/products');
+
+        $product = $this->entityManager->getRepository(Product::class)
+            ->findOneBy(['title' => 'Test Product']);
+
+        $this->assertNotNull($product);
+        $this->assertCount(1, $product->getAttributes());
+        $this->assertSame('Test Product Description', $product->getDescription());
+    }
+
+    /**
+     * @test
+     * @dataProvider invalidFormData
+     */
+    public function store_product_validation($title, $description, $price, $categories, $attributes)
+    {
+        $this->logIn();
+
+        $crawler = $this->client->request('GET', '/admin/products/create');
+        $form = $crawler->selectButton('Save Product')->form();
+
+        $values = $this->productFormData();
+        $values['product']['_token'] = $form['product[_token]']->getValue();
+
+        $values['product']['title'] = $title;
+        $values['product']['description'] = $description;
+        $values['product']['price'] = $price;
+        $values['product']['categories'] = $categories;
+        $values['product']['attributes'] = $attributes;
+
+        $this->client->request('POST', '/admin/products/create', $values);
+
+        $this->assertRouteSame('admin_products_create');
+
+        $product = $this->entityManager->getRepository(Product::class)
+            ->findOneBy(['title' => 'Test Product']);
+
+        $this->assertNull($product);
+    }
+
+    private function productFormData()
+    {
+        return array_merge([
             'product' => [
-                '_token' => $form['product[_token]']->getValue(),
+                '_token' => '',
                 'title' => 'Test Product',
                 'description' => 'Test Product Description',
                 'price' => 100,
@@ -90,16 +137,24 @@ class ProductControllerTest extends DbWebTestCase
                     ]
                 ]
             ]
-        ];
+        ]);
+    }
 
-        $this->client->request('POST', '/admin/products/create', $values);
+    public function invalidFormData()
+    {
+        yield ['', 'Test Product Description', 100, [1], [], 'Product title cannot be empty'];
+        yield ['Test Product', 'Test Product Description', -100, [1], [], 'Product price cannot be negative'];
+        yield ['Test Product', 'Test Product Description', 'this is text', [1], [], 'Product price should be a number'];
+        yield ['Test Product', 'Test Product Description', 10, [], [], 'Product requires a category'];
+        yield ['Test Product', 'Test Product Description', 10, [10], [], 'Product requires a category that exists'];
 
-        $this->assertResponseRedirects('/admin/products');
+        $invalidAttribute = [0 => ['attribute' => 1, 'value' => '']];
+        yield ['Test Product', 'Test Product Description', 10, [1], $invalidAttribute, 'Product attribute value cannot be empty'];
 
-        $product = $this->entityManager->getRepository(Product::class)->findOneBy(['title' => 'Test Product']);
+        $invalidAttribute = [0 => ['attribute' => 10, 'value' => 'Test']];
+        yield ['Test Product', 'Test Product Description', 10, [1], $invalidAttribute, 'Product attribute requires id that exists'];
 
-        $this->assertNotNull($product);
-        $this->assertCount(1, $product->getAttributes());
-        $this->assertSame('Test Product Description', $product->getDescription());
+        $invalidAttribute = [0 => ['attribute' => null, 'value' => 'Test']];
+        yield ['Test Product', 'Test Product Description', 10, [1], $invalidAttribute, 'Product attribute requires an id'];
     }
 }

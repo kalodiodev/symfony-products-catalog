@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table(name="products")
@@ -21,6 +22,7 @@ class Product
 
     /**
      * @ORM\Column(type="string", length=100)
+     * @Assert\NotBlank()
      */
     private $title;
 
@@ -31,11 +33,13 @@ class Product
 
     /**
      * @ORM\Column(type="decimal", precision=10, scale=4)
+     * @Assert\PositiveOrZero()
      */
     private $price;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Category", inversedBy="products")
+     * @Assert\Count(min="1")
      */
     private $categories;
 
@@ -46,6 +50,7 @@ class Product
      *     orphanRemoval=true,
      *     cascade={"persist"}
      * )
+     * @Assert\Valid()
      */
     private $attributes;
 

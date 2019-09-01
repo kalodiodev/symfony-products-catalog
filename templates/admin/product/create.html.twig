@@ -43,10 +43,10 @@
 
         <div class="form-group">
             <label for="category_name">{{ 'admin.products.form.title.label'|trans }}</label>
-            {{ form_widget(form.title, {'attr': {'class': 'form-control'}}) }}
+            {{ form_widget(form.title, {'attr': {'class': 'form-control' ~ (form_errors(form.title) ? ' is-invalid' : '') }}) }}
             <div class="invalid-feedback">
                 {% if form.title.vars['errors']|length > 0 %}
-                    {{ form.name.vars['errors'][0].message }}
+                    {{ form.title.vars['errors'][0].message }}
                 {% endif %}
             </div>
         </div>

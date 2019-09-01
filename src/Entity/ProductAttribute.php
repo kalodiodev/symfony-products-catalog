@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table(name="product_attributes")
@@ -25,11 +26,13 @@ class ProductAttribute
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Attribute", inversedBy="productAttributes")
      * @ORM\JoinColumn(nullable=false)
+     * @Assert\NotBlank()
      */
     private $attribute;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
      */
     private $value;
 

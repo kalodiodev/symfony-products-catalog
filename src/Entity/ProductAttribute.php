@@ -24,7 +24,11 @@ class ProductAttribute
     private $product;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Attribute", inversedBy="productAttributes")
+     * @ORM\ManyToOne(
+     *     targetEntity="App\Entity\Attribute",
+     *     inversedBy="productAttributes",
+     *     fetch="EAGER"
+     * )
      * @ORM\JoinColumn(nullable=false)
      * @Assert\NotBlank()
      */

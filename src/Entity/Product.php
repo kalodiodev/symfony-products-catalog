@@ -47,6 +47,7 @@ class Product
      * @ORM\OneToMany(
      *     targetEntity="App\Entity\ProductAttribute",
      *     mappedBy="product",
+     *     fetch="EAGER",
      *     orphanRemoval=true,
      *     cascade={"persist"}
      * )

@@ -87,6 +87,27 @@ class ProductController extends AbstractController
     }
 
     /**
+     * Delete product
+     *
+     * @Route("/{id}/delete", name="admin_products_delete", methods={"POST"})
+     */
+    public function destroy(Product $product, Request $request, EntityManagerInterface $em)
+    {
+        if (!$this->isCsrfTokenValid('delete', $request->request->get('token'))) {
+            $this->addFlash('error', 'messages.error.token_mismatch');
+
+            return $this->redirectToRoute('admin_products_update', ['id' => $product->getId()]);
+        }
+
+        $em->remove($product);
+        $em->flush();
+
+        $this->addFlash('success', 'admin.products.flash.success.deleted');
+
+        return $this->redirectToRoute('admin_products');
+    }
+
+    /**
      * Show Product
      *
      * @Route("/{id}", name="admin_products_show", methods={"GET"})

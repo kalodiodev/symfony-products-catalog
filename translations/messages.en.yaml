@@ -198,12 +198,14 @@ admin:
       edit: Edit
       add: Add Product
       save: Save Product
+      delete: Delete Product
       add_attribute: Add Attribute
       remove_attribute: Remove
     flash:
       success:
         created: Product Created!
         updated: Product Updated!
+        deleted: Product Deleted!
 
   categories:
     index:

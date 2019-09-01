@@ -169,6 +169,42 @@ class ProductControllerTest extends DbWebTestCase
         $this->assertNull($product);
     }
 
+    /** @test */
+    public function a_guest_cannot_delete_a_product()
+    {
+        $this->client->request('POST', '/admin/products/1/delete');
+
+        $this->assertResponseRedirects('/login');
+    }
+
+    /** @test */
+    public function a_user_can_delete_a_product()
+    {
+        $this->logIn();
+
+        $this->client->request('GET', '/admin/products/1/edit');
+        $this->client->submitForm('Delete Product');
+
+        $product = $this->entityManager->getRepository(Product::class)->find(1);
+
+        $this->assertNull($product);
+    }
+
+    /** @test */
+    public function cannot_delete_a_product_with_invalid_csrf_token()
+    {
+        $this->logIn();
+
+        $this->client->request('GET', '/admin/products/1/edit');
+        $this->client->submitForm('Delete Product', ['token' => "invalid_token"]);
+
+        $this->assertResponseRedirects('/admin/products/1/edit');
+
+        $product = $this->entityManager->getRepository(Product::class)->find(1);
+
+        $this->assertNotNull($product);
+    }
+
     private function productFormData()
     {
         return array_merge([

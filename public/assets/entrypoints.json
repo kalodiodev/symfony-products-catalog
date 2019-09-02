@@ -1,15 +1,15 @@
 {
   "entrypoints": {
-    "js/jquery-3.3.1": {
-      "js": [
-        "/assets/runtime.js",
-        "/assets/js/jquery-3.3.1.js"
-      ]
-    },
     "js/bootstrap": {
       "js": [
         "/assets/runtime.js",
         "/assets/js/bootstrap.js"
+      ]
+    },
+    "js/admin": {
+      "js": [
+        "/assets/runtime.js",
+        "/assets/js/admin.js"
       ]
     },
     "css/dashboard": {

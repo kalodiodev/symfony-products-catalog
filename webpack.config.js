@@ -22,10 +22,8 @@ Encore
     .addStyleEntry('css/dashboard', ['./assets/css/dashboard.css'])
     .addStyleEntry('css/bootstrap', ['./assets/css/bootstrap.css'])
 
-    // .addEntry('js/jquery-3.3.1', './assets/js/jquery-3.3.1.js')
-    // .addEntry('js/popper', './assets/js/popper.js')
     .addEntry('js/bootstrap', './assets/js/bootstrap.js')
-    // .addEntry('js/feather', './assets/js/feather.js')
+    .addEntry('js/admin', './assets/js/admin.js')
 
     // will require an extra script tag for runtime.js
     // but, you probably want this, unless you're building a single-page app

@@ -4,7 +4,10 @@
 
 {% block body %}
 
-    {% include 'admin/brand/_delete_form.html.twig' %}
+    {% include 'admin/_includes/delete_form.html.twig' with {
+        'action_url': url('admin_brands_delete', {id: brand.id}),
+        'button_label': 'admin.brands.button.delete'|trans
+    } %}
 
     <h1>{{ 'admin.brands.edit.title'|trans }}</h1>
 

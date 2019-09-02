@@ -1,4 +1,0 @@
-<form style="float: right; margin-top: 15px;" action="{{ url('admin_users_delete', {id: user.id}) }}" method="post">
-    <input type="hidden" name="token" value="{{ csrf_token('delete') }}" />
-    <button type="submit" class="btn btn-danger">{{ 'admin.users.button.delete'|trans }}</button>
-</form>

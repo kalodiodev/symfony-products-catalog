@@ -33,8 +33,9 @@
 
 {{ form_start(form) }}
 
+{# Title field #}
 <div class="form-group">
-    <label for="category_name">{{ 'admin.products.form.title.label'|trans }}</label>
+    <label for="product_title">{{ 'admin.products.form.title.label'|trans }}</label>
     {{ form_widget(form.title, {'attr': {'class': 'form-control' ~ (form_errors(form.title) ? ' is-invalid' : '') }}) }}
     <div class="invalid-feedback">
         {% if form.title.vars['errors']|length > 0 %}
@@ -43,9 +44,21 @@
     </div>
 </div>
 
+{# Meta Title field #}
 <div class="form-group">
-    <label for="category_name">{{ 'admin.products.form.description.label'|trans }}</label>
-    {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
+    <label for="product_meta_title">{{ 'admin.products.form.meta_title.label'|trans }}</label>
+    {{ form_widget(form.meta_title, {'attr': {'class': 'form-control' ~ (form_errors(form.meta_title) ? ' is-invalid' : '') }}) }}
+    <div class="invalid-feedback">
+        {% if form.meta_title.vars['errors']|length > 0 %}
+            {{ form.meta_title.vars['errors'][0].message }}
+        {% endif %}
+    </div>
+</div>
+
+{# Description field #}
+<div class="form-group">
+    <label for="product_description">{{ 'admin.products.form.description.label'|trans }}</label>
+    {{ form_widget(form.description, {'attr': {'class': 'form-control' ~ (form_errors(form.description) ? ' is-invalid' : '') }}) }}
     <div class="invalid-feedback">
         {% if form.description.vars['errors']|length > 0 %}
             {{ form.description.vars['errors'][0].message }}
@@ -53,9 +66,54 @@
     </div>
 </div>
 
+{# Meta Description field #}
 <div class="form-group">
-    <label for="category_name">{{ 'admin.products.form.price.label'|trans }}</label>
-    {{ form_widget(form.price, {'attr': {'class': 'form-control'}}) }}
+    <label for="product_meta_description">{{ 'admin.products.form.meta_description.label'|trans }}</label>
+    {{ form_widget(form.meta_description, {'attr': {'class': 'form-control' ~ (form_errors(form.meta_description) ? ' is-invalid' : '') }}) }}
+    <div class="invalid-feedback">
+        {% if form.meta_description.vars['errors']|length > 0 %}
+            {{ form.meta_description.vars['errors'][0].message }}
+        {% endif %}
+    </div>
+</div>
+
+{# Brand #}
+<div class="form-group">
+    <label for="product_brand">{{ 'admin.products.form.brand.label'|trans }}</label>
+    {{ form_widget(form.brand, {'attr': {'class': 'form-control' ~ (form_errors(form.brand) ? ' is-invalid' : '') }}) }}
+    <div class="invalid-feedback">
+        {% if form.brand.vars['errors']|length > 0 %}
+            {{ form.brand.vars['errors'][0].message }}
+        {% endif %}
+    </div>
+</div>
+
+{# SKU field #}
+<div class="form-group">
+    <label for="product_sku">{{ 'admin.products.form.sku.label'|trans }}</label>
+    {{ form_widget(form.sku, {'attr': {'class': 'form-control' ~ (form_errors(form.sku) ? ' is-invalid' : '') }}) }}
+    <div class="invalid-feedback">
+        {% if form.sku.vars['errors']|length > 0 %}
+            {{ form.sku.vars['errors'][0].message }}
+        {% endif %}
+    </div>
+</div>
+
+{# MPN field #}
+<div class="form-group">
+    <label for="product_mpn">{{ 'admin.products.form.mpn.label'|trans }}</label>
+    {{ form_widget(form.mpn, {'attr': {'class': 'form-control' ~ (form_errors(form.mpn) ? ' is-invalid' : '') }}) }}
+    <div class="invalid-feedback">
+        {% if form.mpn.vars['errors']|length > 0 %}
+            {{ form.mpn.vars['errors'][0].message }}
+        {% endif %}
+    </div>
+</div>
+
+{# Price field #}
+<div class="form-group">
+    <label for="product_price">{{ 'admin.products.form.price.label'|trans }}</label>
+    {{ form_widget(form.price, {'attr': {'class': 'form-control' ~ (form_errors(form.price) ? ' is-invalid' : '') }}) }}
     <div class="invalid-feedback">
         {% if form.price.vars['errors']|length > 0 %}
             {{ form.price.vars['errors'][0].message }}
@@ -63,9 +121,30 @@
     </div>
 </div>
 
+{# Quantity field #}
 <div class="form-group">
-    <label for="category_name">{{ 'admin.products.form.categories.label'|trans }}</label>
-    {{ form_widget(form.categories, {'attr': {'class': 'form-control'}}) }}
+    <label for="product_quantity">{{ 'admin.products.form.quantity.label'|trans }}</label>
+    {{ form_widget(form.quantity, {'attr': {'class': 'form-control' ~ (form_errors(form.quantity) ? ' is-invalid' : '') }}) }}
+    <div class="invalid-feedback">
+        {% if form.quantity.vars['errors']|length > 0 %}
+            {{ form.quantity.vars['errors'][0].message }}
+        {% endif %}
+    </div>
+</div>
+
+{# Enabled Switch #}
+<div class="form-group">
+    <div class="custom-control custom-switch">
+        {{ form_widget(form.enabled) }}
+        <label class="custom-control-label"
+               for="product_enabled">{{ 'admin.products.form.enabled.label'|trans }}</label>
+    </div>
+</div>
+
+{# Categories #}
+<div class="form-group">
+    <label for="product_categories">{{ 'admin.products.form.categories.label'|trans }}</label>
+    {{ form_widget(form.categories, {'attr': {'class': 'form-control' ~ (form_errors(form.categories) ? ' is-invalid' : '') }}) }}
     <div class="invalid-feedback">
         {% if form.categories.vars['errors']|length > 0 %}
             {{ form.categories.vars['errors'][0].message }}

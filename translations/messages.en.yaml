@@ -179,12 +179,31 @@ admin:
       title:
         label: Title
         placeholder: Enter title of product
+      meta_title:
+        label: Meta Title
+        placeholder: Enter meta title of product
       description:
         label: Description
         placeholder: Enter description of product
+      meta_description:
+        label: Meta Description
+        placeholder: Enter meta description of product
+      brand:
+        label: Brand
+      sku:
+        label: SKU
+        placeholder: Enter sku of product
+      mpn:
+        label: MPN
+        placeholder: Enter mpn of product
       price:
         label: Price
         placeholder: Enter price of product
+      quantity:
+        label: Quantity
+        placeholder: Enter product quantity
+      enabled:
+        label: Enabled
       categories:
         label: Categories
       attributes:

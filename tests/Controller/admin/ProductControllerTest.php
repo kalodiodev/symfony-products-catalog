@@ -143,7 +143,7 @@ class ProductControllerTest extends DbWebTestCase
      * @test
      * @dataProvider invalidFormData
      */
-    public function store_product_validation($title, $description, $price, $categories, $attributes)
+    public function store_product_validation($productData)
     {
         $this->logIn();
 
@@ -153,11 +153,16 @@ class ProductControllerTest extends DbWebTestCase
         $values = $this->productFormData();
         $values['product']['_token'] = $form['product[_token]']->getValue();
 
-        $values['product']['title'] = $title;
-        $values['product']['description'] = $description;
-        $values['product']['price'] = $price;
-        $values['product']['categories'] = $categories;
-        $values['product']['attributes'] = $attributes;
+        $values['product']['title'] = $productData['title'];
+        $values['product']['meta_title'] = $productData['meta_title'];
+        $values['product']['description'] = $productData['description'];
+        $values['product']['meta_description'] = $productData['meta_description'];
+        $values['product']['sku'] = $productData['sku'];
+        $values['product']['mpn'] = $productData['mpn'];
+        $values['product']['price'] = $productData['price'];
+        $values['product']['enabled'] = $productData['enabled'];
+        $values['product']['categories'] = $productData['categories'];
+        $values['product']['attributes'] = $productData['attributes'];
 
         $this->client->request('POST', '/admin/products/create', $values);
 
@@ -166,7 +171,7 @@ class ProductControllerTest extends DbWebTestCase
         $product = $this->entityManager->getRepository(Product::class)
             ->findOneBy(['title' => 'Test Product']);
 
-        $this->assertNull($product);
+        $this->assertNull($product, $productData['errorMsg']);
     }
 
     /** @test */
@@ -211,8 +216,14 @@ class ProductControllerTest extends DbWebTestCase
             'product' => [
                 '_token' => '',
                 'title' => 'Test Product',
+                'meta_title' => 'test product',
                 'description' => 'Test Product Description',
+                'meta_description' => 'test product description',
+                'sku' => 'A-100',
+                'mpn' => '100',
                 'price' => 100,
+                'enabled' => true,
+                'quantity' => 10,
                 'categories' => [1],
                 'attributes' => [
                     0 => [
@@ -226,19 +237,28 @@ class ProductControllerTest extends DbWebTestCase
 
     public function invalidFormData()
     {
-        yield ['', 'Test Product Description', 100, [1], [], 'Product title cannot be empty'];
-        yield ['Test Product', 'Test Product Description', -100, [1], [], 'Product price cannot be negative'];
-        yield ['Test Product', 'Test Product Description', 'this is text', [1], [], 'Product price should be a number'];
-        yield ['Test Product', 'Test Product Description', 10, [], [], 'Product requires a category'];
-        yield ['Test Product', 'Test Product Description', 10, [10], [], 'Product requires a category that exists'];
+        yield $this->validationOverrideData('title', '', 'Product title cannot be empty');
+        yield $this->validationOverrideData('price', -100, 'Product Price cannot be negative');
+        yield $this->validationOverrideData('price', 'this is text', 'Product price should be a number');
+        yield $this->validationOverrideData('categories', [], 'Product requires a category');
+        yield $this->validationOverrideData('categories', [10], 'Product requires a category that exists');
 
-        $invalidAttribute = [0 => ['attribute' => 1, 'value' => '']];
-        yield ['Test Product', 'Test Product Description', 10, [1], $invalidAttribute, 'Product attribute value cannot be empty'];
+        $invalidAttr = [0 => ['attribute' => 1, 'value' => '']];
+        yield $this->validationOverrideData('attributes', $invalidAttr, 'Product attribute cannot be empty');
 
-        $invalidAttribute = [0 => ['attribute' => 10, 'value' => 'Test']];
-        yield ['Test Product', 'Test Product Description', 10, [1], $invalidAttribute, 'Product attribute requires id that exists'];
+        $invalidAttr = [0 => ['attribute' => 10, 'value' => 'Test']];
+        yield $this->validationOverrideData('attributes', $invalidAttr, 'Product attribute requires id that exists');
 
-        $invalidAttribute = [0 => ['attribute' => null, 'value' => 'Test']];
-        yield ['Test Product', 'Test Product Description', 10, [1], $invalidAttribute, 'Product attribute requires an id'];
+        $invalidAttr = [0 => ['attribute' => null, 'value' => 'Test']];
+        yield $this->validationOverrideData('attributes', $invalidAttr, 'Product attribute requires an id');
+    }
+
+    private function validationOverrideData($field, $value, $errorMsg = '')
+    {
+        $product = $this->productFormData();
+        $product['product'][$field] = $value;
+        $product['product']['errorMsg'] = $errorMsg;
+
+        return $product;
     }
 }

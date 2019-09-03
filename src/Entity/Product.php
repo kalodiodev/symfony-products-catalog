@@ -21,6 +21,16 @@ class Product
     private $id;
 
     /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $sku;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $mpn;
+
+    /**
      * @ORM\Column(type="string", length=100)
      * @Assert\NotBlank()
      */
@@ -29,7 +39,17 @@ class Product
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
+    private $meta_title;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
     private $description;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $meta_description;
 
     /**
      * @ORM\Column(type="decimal", precision=10, scale=4)
@@ -55,6 +75,21 @@ class Product
      */
     private $attributes;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $quantity;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $enabled;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Brand", inversedBy="products")
+     */
+    private $brand;
+
     public function __construct()
     {
         $this->categories = new ArrayCollection();
@@ -64,6 +99,30 @@ class Product
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getSku(): ?string
+    {
+        return $this->sku;
+    }
+
+    public function setSku(string $sku): self
+    {
+        $this->sku = $sku;
+
+        return $this;
+    }
+
+    public function getMpn(): ?string
+    {
+        return $this->mpn;
+    }
+
+    public function setMpn(?string $mpn): self
+    {
+        $this->mpn = $mpn;
+
+        return $this;
     }
 
     public function getTitle(): ?string
@@ -78,6 +137,18 @@ class Product
         return $this;
     }
 
+    public function getMetaTitle(): ?string
+    {
+        return $this->meta_title;
+    }
+
+    public function setMetaTitle(?string $meta_title): self
+    {
+        $this->meta_title = $meta_title;
+
+        return $this;
+    }
+
     public function getDescription(): ?string
     {
         return $this->description;
@@ -86,6 +157,18 @@ class Product
     public function setDescription(?string $description): self
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function getMetaDescription(): ?string
+    {
+        return $this->meta_description;
+    }
+
+    public function setMetaDescription(?string $meta_description): self
+    {
+        $this->meta_description = $meta_description;
 
         return $this;
     }
@@ -155,6 +238,42 @@ class Product
                 $attribute->setProduct(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getQuantity(): ?int
+    {
+        return $this->quantity;
+    }
+
+    public function setQuantity(int $quantity): self
+    {
+        $this->quantity = $quantity;
+
+        return $this;
+    }
+
+    public function getEnabled(): ?bool
+    {
+        return $this->enabled;
+    }
+
+    public function setEnabled(bool $enabled): self
+    {
+        $this->enabled = $enabled;
+
+        return $this;
+    }
+
+    public function getBrand(): ?Brand
+    {
+        return $this->brand;
+    }
+
+    public function setBrand(?Brand $brand): self
+    {
+        $this->brand = $brand;
 
         return $this;
     }

@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20190830145425 extends AbstractMigration
+final class Version20190903141454 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -22,14 +22,14 @@ final class Version20190830145425 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('CREATE TABLE product_attributes (id INT AUTO_INCREMENT NOT NULL, product_id INT DEFAULT NULL, attribute_id INT NOT NULL, value VARCHAR(255) NOT NULL, INDEX IDX_A2FCC15B4584665A (product_id), INDEX IDX_A2FCC15BB6E62EFA (attribute_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
-        $this->addSql('ALTER TABLE product_attributes ADD CONSTRAINT FK_A2FCC15B4584665A FOREIGN KEY (product_id) REFERENCES products (id)');
-        $this->addSql('ALTER TABLE product_attributes ADD CONSTRAINT FK_A2FCC15BB6E62EFA FOREIGN KEY (attribute_id) REFERENCES attributes (id)');
         $this->addSql('ALTER TABLE attributes CHANGE description description VARCHAR(255) DEFAULT NULL');
         $this->addSql('ALTER TABLE brands CHANGE details details VARCHAR(255) DEFAULT NULL');
         $this->addSql('ALTER TABLE categories CHANGE description description VARCHAR(255) DEFAULT NULL');
-        $this->addSql('ALTER TABLE products CHANGE description description VARCHAR(255) DEFAULT NULL');
+        $this->addSql('ALTER TABLE products ADD brand_id INT DEFAULT NULL, ADD sku VARCHAR(255) NOT NULL, ADD mpn VARCHAR(255) DEFAULT NULL, ADD meta_title VARCHAR(255) DEFAULT NULL, ADD meta_description VARCHAR(255) DEFAULT NULL, ADD quantity INT NOT NULL, ADD enabled TINYINT(1) NOT NULL, CHANGE description description VARCHAR(255) DEFAULT NULL');
+        $this->addSql('ALTER TABLE products ADD CONSTRAINT FK_B3BA5A5A44F5D008 FOREIGN KEY (brand_id) REFERENCES brands (id)');
+        $this->addSql('CREATE INDEX IDX_B3BA5A5A44F5D008 ON products (brand_id)');
         $this->addSql('ALTER TABLE user CHANGE roles roles JSON NOT NULL');
+        $this->addSql('ALTER TABLE product_attributes CHANGE product_id product_id INT DEFAULT NULL');
     }
 
     public function down(Schema $schema) : void
@@ -37,11 +37,13 @@ final class Version20190830145425 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('DROP TABLE product_attributes');
         $this->addSql('ALTER TABLE attributes CHANGE description description VARCHAR(255) DEFAULT \'NULL\' COLLATE utf8mb4_unicode_ci');
         $this->addSql('ALTER TABLE brands CHANGE details details VARCHAR(255) DEFAULT \'NULL\' COLLATE utf8mb4_unicode_ci');
         $this->addSql('ALTER TABLE categories CHANGE description description VARCHAR(255) DEFAULT \'NULL\' COLLATE utf8mb4_unicode_ci');
-        $this->addSql('ALTER TABLE products CHANGE description description VARCHAR(255) DEFAULT \'NULL\' COLLATE utf8mb4_unicode_ci');
+        $this->addSql('ALTER TABLE product_attributes CHANGE product_id product_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE products DROP FOREIGN KEY FK_B3BA5A5A44F5D008');
+        $this->addSql('DROP INDEX IDX_B3BA5A5A44F5D008 ON products');
+        $this->addSql('ALTER TABLE products DROP brand_id, DROP sku, DROP mpn, DROP meta_title, DROP meta_description, DROP quantity, DROP enabled, CHANGE description description VARCHAR(255) DEFAULT \'NULL\' COLLATE utf8mb4_unicode_ci');
         $this->addSql('ALTER TABLE user CHANGE roles roles LONGTEXT NOT NULL COLLATE utf8mb4_bin');
     }
 }

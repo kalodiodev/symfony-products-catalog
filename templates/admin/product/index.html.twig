@@ -22,7 +22,8 @@
                         <td>{{ product.title }}</td>
                         <td>{{ product.description }}</td>
                         <td>
-                            <a class="btn btn-sm btn-warning" href="{{ path('admin_products_update', {'id': product.id}) }}">
+                            <a class="btn btn-sm btn-warning"
+                               href="{{ path('admin_products_update', {'id': product.id}) }}">
                                 {{ 'admin.products.button.edit'|trans }}
                             </a>
                         </td>
@@ -30,6 +31,11 @@
                 {% endfor %}
             </tbody>
         </table>
-        <a class="btn btn-primary" href="{{ path('admin_products_create') }}">{{ 'admin.products.button.add'|trans }}</a>
+
+        {{ knp_pagination_render(products) }}
+
+        <a class="btn btn-primary" href="{{ path('admin_products_create') }}">
+            {{ 'admin.products.button.add'|trans }}
+        </a>
     </div>
 {% endblock %}

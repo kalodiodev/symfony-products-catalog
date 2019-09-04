@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Product;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -14,9 +15,28 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class ProductRepository extends ServiceEntityRepository
 {
-    public function __construct(RegistryInterface $registry)
+    protected $paginator;
+
+    public function __construct(RegistryInterface $registry, PaginatorInterface $paginator)
     {
+        $this->paginator = $paginator;
+
         parent::__construct($registry, Product::class);
+    }
+
+    /**
+     * Find all products paginated
+     *
+     * @param $page
+     * @param int $items
+     * @return \Knp\Component\Pager\Pagination\PaginationInterface
+     */
+    public function findAllPaginated($page, $items = 20)
+    {
+        $dbQuery = $this->createQueryBuilder('p')
+            ->getQuery();
+
+        return $this->paginator->paginate($dbQuery, $page, $items);
     }
 
     // /**

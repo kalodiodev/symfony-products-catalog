@@ -21,9 +21,14 @@ class ProductController extends AbstractController
      *
      * @Route("", name="admin_products")
      */
-    public function index()
+    public function index(Request $request)
     {
-        $products = $this->getDoctrine()->getRepository(Product::class)->findAll();
+        $page = $request->query->getInt('page', 1) ?: 1;
+
+        $products = $this->getDoctrine()->getRepository(Product::class)
+            ->findAllPaginated($page, 20);
+
+        $products->setCustomParameters(['align' => 'center']);
 
         return $this->render('admin/product/index.html.twig', [
             'products' => $products

@@ -213,6 +213,9 @@ admin:
       attribute_value:
         label: Value
         placeholder: Enter value of attibute
+      slug:
+        label: Slug
+        placeholder: Enter slug of product
     button:
       edit: Edit
       add: Add Product

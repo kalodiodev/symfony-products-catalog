@@ -77,6 +77,17 @@
     </div>
 </div>
 
+{# Slug field #}
+<div class="form-group">
+    <label for="product_slug">{{ 'admin.products.form.slug.label'|trans }}</label>
+    {{ form_widget(form.slug, {'attr': {'class': 'form-control' ~ (form_errors(form.slug) ? ' is-invalid' : '') }}) }}
+    <div class="invalid-feedback">
+        {% if form.slug.vars['errors']|length > 0 %}
+            {{ form.slug.vars['errors'][0].message }}
+        {% endif %}
+    </div>
+</div>
+
 {# Brand #}
 <div class="form-group">
     <label for="product_brand">{{ 'admin.products.form.brand.label'|trans }}</label>

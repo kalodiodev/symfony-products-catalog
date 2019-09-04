@@ -44,6 +44,13 @@ class ProductType extends AbstractType
                     'placeholder' => 'admin.products.form.meta_description.placeholder'
                 ]
             ])
+            ->add('slug', TextType::class, [
+                'empty_data' => '',
+                'required' => false,
+                'attr' => [
+                    'placeholder' => 'admin.products.form.slug.placeholder'
+                ]
+            ])
             ->add('sku', TextType::class, [
                 'empty_data' => '',
                 'attr' => [

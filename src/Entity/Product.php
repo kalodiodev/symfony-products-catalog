@@ -23,6 +23,7 @@ class Product
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
      */
     private $sku;
 
@@ -78,16 +79,19 @@ class Product
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\PositiveOrZero()
      */
     private $quantity;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Assert\NotBlank()
      */
     private $enabled;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Brand", inversedBy="products")
+     * @Assert\NotBlank()
      */
     private $brand;
 

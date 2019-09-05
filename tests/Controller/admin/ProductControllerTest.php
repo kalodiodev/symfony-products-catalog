@@ -147,6 +147,8 @@ class ProductControllerTest extends DbWebTestCase
     {
         $this->logIn();
 
+        $this->client->catchExceptions(false);
+
         $crawler = $this->client->request('GET', '/admin/products/create');
         $form = $crawler->selectButton('Save Product')->form();
 
@@ -160,6 +162,8 @@ class ProductControllerTest extends DbWebTestCase
         $values['product']['sku'] = $productData['sku'];
         $values['product']['mpn'] = $productData['mpn'];
         $values['product']['price'] = $productData['price'];
+        $values['product']['quantity'] = $productData['quantity'];
+        $values['product']['brand'] = $productData['brand'];
         $values['product']['enabled'] = $productData['enabled'];
         $values['product']['categories'] = $productData['categories'];
         $values['product']['attributes'] = $productData['attributes'];
@@ -224,6 +228,7 @@ class ProductControllerTest extends DbWebTestCase
                 'price' => 100,
                 'enabled' => true,
                 'quantity' => 10,
+                'brand' => 1,
                 'categories' => [1],
                 'attributes' => [
                     0 => [
@@ -240,6 +245,11 @@ class ProductControllerTest extends DbWebTestCase
         yield $this->validationOverrideData('title', '', 'Product title cannot be empty');
         yield $this->validationOverrideData('price', -100, 'Product Price cannot be negative');
         yield $this->validationOverrideData('price', 'this is text', 'Product price should be a number');
+        yield $this->validationOverrideData('quantity', null, 'Product quantity is required');
+        yield $this->validationOverrideData('quantity', -10, 'Product quantity should be positive or zero');
+        yield $this->validationOverrideData('sku', '', 'Product sku is required');
+        yield $this->validationOverrideData('brand', null, 'Product brand is required');
+        yield $this->validationOverrideData('enabled', null, 'Product enabled status is required');
         yield $this->validationOverrideData('categories', [], 'Product requires a category');
         yield $this->validationOverrideData('categories', [10], 'Product requires a category that exists');
 

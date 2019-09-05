@@ -34,6 +34,12 @@ admin:
     options: Options
     frontpage: Front
 
+  dashboard:
+    index:
+      head:
+        title: Admin - Dashboard
+      title: Dashboard
+
   brands:
     index:
       head:

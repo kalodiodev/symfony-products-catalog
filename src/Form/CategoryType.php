@@ -28,7 +28,7 @@ class CategoryType extends AbstractType
                 ]
             ])
             ->add('slug', TextType::class, [
-                'empty_data' => null,
+                'empty_data' => '',
                 'attr' => [
                     'placeholder' => 'admin.categories.form.slug.placeholder'
                 ]

@@ -229,6 +229,7 @@ class ProductControllerTest extends DbWebTestCase
                 'enabled' => true,
                 'quantity' => 10,
                 'brand' => 1,
+                'slug' => null,
                 'categories' => [1],
                 'attributes' => [
                     0 => [

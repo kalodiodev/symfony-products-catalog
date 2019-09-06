@@ -53,7 +53,9 @@ class CategoryController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $category = $form->getData();
+            if (empty($category->getSlug())) {
+                $category->setSlug($category->getName());
+            }
 
             $em->persist($category);
             $em->flush();
@@ -83,7 +85,9 @@ class CategoryController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $category = $form->getData();
+            if (empty($category->getSlug())) {
+                $category->setSlug($category->getName());
+            }
 
             $em->persist($category);
             $em->flush();

@@ -50,6 +50,9 @@ class ProductController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            if (empty($product->getSlug())) {
+                $product->setSlug($product->getTitle());
+            }
 
             $em->persist($product);
             $em->flush();
@@ -77,6 +80,10 @@ class ProductController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            if (empty($product->getSlug())) {
+                $product->setSlug($product->getTitle());
+            }
+
             $em->persist($product);
             $em->flush();
 

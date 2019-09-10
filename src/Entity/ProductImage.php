@@ -9,6 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class ProductImage
 {
+    public const uploadFolder = '/images/products/';
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()

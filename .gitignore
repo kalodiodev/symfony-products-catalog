@@ -1,4 +1,5 @@
 .idea/
+public/images/products/*
 
 ###> symfony/framework-bundle ###
 /.env.local

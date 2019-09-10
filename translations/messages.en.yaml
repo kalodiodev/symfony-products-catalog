@@ -169,6 +169,8 @@ admin:
       head:
         title: Admin - Show Product
       title: Product
+      subtitle:
+        images: Images
     create:
       head:
         title: Admin - Create Product
@@ -223,6 +225,8 @@ admin:
       slug:
         label: Slug
         placeholder: Enter slug of product
+      image:
+        label: Image
     button:
       edit: Edit
       add: Add Product
@@ -230,11 +234,13 @@ admin:
       delete: Delete Product
       add_attribute: Add Attribute
       remove_attribute: Remove
+      upload_image: Upload Image
     flash:
       success:
         created: Product Created!
         updated: Product Updated!
         deleted: Product Deleted!
+        image_uploaded: Product Image Uploaded!
 
   categories:
     index:

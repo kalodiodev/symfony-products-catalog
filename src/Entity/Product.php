@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="products")
  * @ORM\Entity(repositoryClass="App\Repository\ProductRepository")
  */
-class Product
+class Product implements Imageable
 {
     /**
      * @ORM\Id()
@@ -114,7 +114,12 @@ class Product
     private $updated_at;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\ProductImage", mappedBy="product", orphanRemoval=true)
+     * @ORM\OneToMany(
+     *     targetEntity="App\Entity\ProductImage",
+     *     mappedBy="product",
+     *     orphanRemoval=true,
+     *     cascade={"persist"}
+     * )
      */
     private $images;
 
@@ -358,5 +363,10 @@ class Product
         }
 
         return $this;
+    }
+
+    public function getImageFilenamePrefix()
+    {
+        return $this->getSlug();
     }
 }

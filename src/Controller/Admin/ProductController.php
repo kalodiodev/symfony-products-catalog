@@ -4,6 +4,9 @@ namespace App\Controller\Admin;
 
 use App\Entity\Product;
 use App\Form\ProductType;
+use App\Utils\ImageUploader;
+use App\Entity\ProductImage;
+use App\Form\ProductImageType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -120,14 +123,38 @@ class ProductController extends AbstractController
     }
 
     /**
-     * Show Product
+     * Show Product / Upload Product Image
      *
+     * @Route("/{id}/image", name="admin_products_image_upload", methods={"POST"})
      * @Route("/{id}", name="admin_products_show", methods={"GET"})
      */
-    public function show(Product $product)
+    public function show(Product $product, Request $request, EntityManagerInterface $em, ImageUploader $imageUploader)
     {
+        $imageForm = $this->createForm(ProductImageType::class, null, [
+            'action' => $this->generateUrl('admin_products_image_upload', ['id' => $product->getId()]),
+            'method' => 'POST',
+        ]);
+
+        $imageForm->handleRequest($request);
+
+        if ($imageForm->isSubmitted() && $imageForm->isValid()) {
+            $productImage = new ProductImage();
+            $filename = $imageUploader->upload($imageForm['image']->getData(), $product);
+            $productImage->setPath(ProductImage::uploadFolder . $filename);
+
+            $product->addImage($productImage);
+
+            $em->persist($product);
+            $em->flush();
+
+            $this->addFlash('success', 'admin.products.flash.success.image_uploaded');
+
+            return $this->redirectToRoute('admin_products_show', ['id' => $product->getId()]);
+        }
+
         return $this->render('admin/product/show.html.twig', [
-            'product' => $product
+            'product' => $product,
+            'imgForm' => $imageForm->createView()
         ]);
     }
 }

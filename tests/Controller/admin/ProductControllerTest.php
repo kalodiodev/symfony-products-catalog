@@ -3,7 +3,9 @@
 namespace App\Tests\Controller\Admin;
 
 use App\Entity\Product;
+use App\Entity\ProductImage;
 use App\Tests\DbWebTestCase;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class ProductControllerTest extends DbWebTestCase
 {
@@ -212,6 +214,49 @@ class ProductControllerTest extends DbWebTestCase
         $product = $this->entityManager->getRepository(Product::class)->find(1);
 
         $this->assertNotNull($product);
+    }
+
+    /** @test */
+    public function a_guest_cannot_upload_a_product_image()
+    {
+        $this->client->request('POST', '/admin/products/1/image');
+
+        $this->assertResponseRedirects('/login');
+    }
+
+    /** @test */
+    public function a_user_can_upload_a_product_image()
+    {
+        $this->logIn();
+
+        $crawler = $this->client->request('GET', '/admin/products/1');
+        $form = $crawler->selectButton('Upload Image')->form();
+
+        $this->client->request('POST', '/admin/products/1/image', [
+            'product_image' => [
+                '_token' => $form['product_image[_token]']->getValue(),
+                'image' => $this->createFakeFile('test', 'png')
+            ]
+        ]);
+
+        $this->assertResponseRedirects('/admin/products/1');
+
+        $productImages = $this->entityManager->getRepository(ProductImage::class)->findAll();
+
+        $this->assertCount(1, $productImages);
+    }
+
+    protected function createFakeFile($filename, $extension, $width = 10, $height = 10): UploadedFile
+    {
+        $file = tempnam(sys_get_temp_dir(), 'upl') . '.' . $extension;
+        imagepng(imagecreatetruecolor(10, 10), $file);
+        return new UploadedFile(
+            $file,
+            $filename,
+            'image/png',
+            null,
+            true
+        );
     }
 
     private function productFormData()

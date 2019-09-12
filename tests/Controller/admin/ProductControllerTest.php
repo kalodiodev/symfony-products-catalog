@@ -2,10 +2,10 @@
 
 namespace App\Tests\Controller\Admin;
 
+use App\Tests\Storage;
 use App\Entity\Product;
 use App\Entity\ProductImage;
 use App\Tests\DbWebTestCase;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class ProductControllerTest extends DbWebTestCase
 {
@@ -235,7 +235,7 @@ class ProductControllerTest extends DbWebTestCase
         $this->client->request('POST', '/admin/products/1/images', [
             'product_image' => [
                 '_token' => $form['product_image[_token]']->getValue(),
-                'image' => $this->createFakeFile('test', 'png')
+                'image' => Storage::createFakeImageFile('test', 'png')
             ]
         ]);
 
@@ -265,7 +265,7 @@ class ProductControllerTest extends DbWebTestCase
         $this->client->request('POST', '/admin/products/1/images', [
             'product_image' => [
                 '_token' => $form['product_image[_token]']->getValue(),
-                'image' => $this->createFakeFile('test', 'png')
+                'image' => Storage::createFakeImageFile('test', 'png')
             ]
         ]);
 
@@ -277,25 +277,6 @@ class ProductControllerTest extends DbWebTestCase
         $productImages = $this->entityManager->getRepository(ProductImage::class)->findAll();
 
         $this->assertCount(0, $productImages);
-    }
-
-    protected function createFakeFile($filename, $extension, $folder = null, $width = 10, $height = 10): UploadedFile
-    {
-        if (! $folder) {
-            $folder = sys_get_temp_dir();
-        }
-
-        $file = tempnam($folder, 'upl');
-        $newFile = $folder . '/' . $filename . '.' . $extension;
-        rename($file, $newFile);
-        imagepng(imagecreatetruecolor(10, 10), $newFile);
-        return new UploadedFile(
-            $newFile,
-            $filename,
-            'image/png',
-            null,
-            true
-        );
     }
 
     private function productFormData()

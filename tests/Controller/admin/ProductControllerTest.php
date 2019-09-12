@@ -229,15 +229,7 @@ class ProductControllerTest extends DbWebTestCase
     {
         $this->logIn();
 
-        $crawler = $this->client->request('GET', '/admin/products/1');
-        $form = $crawler->selectButton('Upload Image')->form();
-
-        $this->client->request('POST', '/admin/products/1/images', [
-            'product_image' => [
-                '_token' => $form['product_image[_token]']->getValue(),
-                'image' => Storage::createFakeImageFile('test', 'png')
-            ]
-        ]);
+        $this->submitProductImage();
 
         $this->assertResponseRedirects('/admin/products/1');
 
@@ -259,15 +251,7 @@ class ProductControllerTest extends DbWebTestCase
     {
         $this->logIn();
 
-        $crawler = $this->client->request('GET', '/admin/products/1');
-        $form = $crawler->selectButton('Upload Image')->form();
-
-        $this->client->request('POST', '/admin/products/1/images', [
-            'product_image' => [
-                '_token' => $form['product_image[_token]']->getValue(),
-                'image' => Storage::createFakeImageFile('test', 'png')
-            ]
-        ]);
+        $this->submitProductImage();
 
         $this->client->request('GET', '/admin/products/1');
         $this->client->submitForm('Delete Image');
@@ -277,6 +261,21 @@ class ProductControllerTest extends DbWebTestCase
         $productImages = $this->entityManager->getRepository(ProductImage::class)->findAll();
 
         $this->assertCount(0, $productImages);
+    }
+
+    protected function submitProductImage($productId = 1, $filename = 'test', $extension = 'png')
+    {
+        $crawler = $this->client->request('GET', '/admin/products/' . $productId);
+        $form = $crawler->selectButton('Upload Image')->form();
+
+        $this->client->request('POST', '/admin/products/' . $productId . '/images', [
+            'product_image' => [
+                '_token' => $form['product_image[_token]']->getValue(),
+                'image' => Storage::createFakeImageFile($filename, $extension)
+            ]
+        ]);
+
+        return $crawler;
     }
 
     private function productFormData()

@@ -4,6 +4,10 @@
     {% for image in product.images %}
         <div class="col-md-3">
             <img src="{{ image.path }}" alt="" >
+            <form method="post" action="{{ path('admin_products_image_delete', {'product':product.id, 'image':image.id}) }}">
+                <input type="hidden" name="token" value="{{ csrf_token('delete') }}" />
+                <button class="btn btn-danger" type="submit">{{ 'admin.products.button.delete_image'|trans }}</button>
+            </form>
         </div>
     {% endfor %}
 </div>

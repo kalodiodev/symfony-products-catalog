@@ -96,8 +96,8 @@ class Product implements Imageable
     private $brand;
 
     /**
-     * @Gedmo\Slug(fields={"title"})
      * @ORM\Column(type="string", length=255, unique=true)
+     * @Gedmo\Slug(fields={"title"}, updatable=true)
      */
     private $slug;
 

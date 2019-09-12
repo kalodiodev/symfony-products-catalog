@@ -219,7 +219,7 @@ class ProductControllerTest extends DbWebTestCase
     /** @test */
     public function a_guest_cannot_upload_a_product_image()
     {
-        $this->client->request('POST', '/admin/products/1/image');
+        $this->client->request('POST', '/admin/products/1/images');
 
         $this->assertResponseRedirects('/login');
     }
@@ -232,7 +232,7 @@ class ProductControllerTest extends DbWebTestCase
         $crawler = $this->client->request('GET', '/admin/products/1');
         $form = $crawler->selectButton('Upload Image')->form();
 
-        $this->client->request('POST', '/admin/products/1/image', [
+        $this->client->request('POST', '/admin/products/1/images', [
             'product_image' => [
                 '_token' => $form['product_image[_token]']->getValue(),
                 'image' => $this->createFakeFile('test', 'png')
@@ -246,12 +246,51 @@ class ProductControllerTest extends DbWebTestCase
         $this->assertCount(1, $productImages);
     }
 
-    protected function createFakeFile($filename, $extension, $width = 10, $height = 10): UploadedFile
+    /** @test */
+    public function a_guest_cannot_delete_a_product_image()
     {
-        $file = tempnam(sys_get_temp_dir(), 'upl') . '.' . $extension;
-        imagepng(imagecreatetruecolor(10, 10), $file);
+        $this->client->request('POST', '/admin/products/1/images/1/delete');
+
+        $this->assertResponseRedirects('/login');
+    }
+
+    /** @test */
+    public function a_user_can_delete_a_product_image()
+    {
+        $this->logIn();
+
+        $crawler = $this->client->request('GET', '/admin/products/1');
+        $form = $crawler->selectButton('Upload Image')->form();
+
+        $this->client->request('POST', '/admin/products/1/images', [
+            'product_image' => [
+                '_token' => $form['product_image[_token]']->getValue(),
+                'image' => $this->createFakeFile('test', 'png')
+            ]
+        ]);
+
+        $this->client->request('GET', '/admin/products/1');
+        $this->client->submitForm('Delete Image');
+
+        $this->assertResponseRedirects('/admin/products/1');
+
+        $productImages = $this->entityManager->getRepository(ProductImage::class)->findAll();
+
+        $this->assertCount(0, $productImages);
+    }
+
+    protected function createFakeFile($filename, $extension, $folder = null, $width = 10, $height = 10): UploadedFile
+    {
+        if (! $folder) {
+            $folder = sys_get_temp_dir();
+        }
+
+        $file = tempnam($folder, 'upl');
+        $newFile = $folder . '/' . $filename . '.' . $extension;
+        rename($file, $newFile);
+        imagepng(imagecreatetruecolor(10, 10), $newFile);
         return new UploadedFile(
-            $file,
+            $newFile,
             $filename,
             'image/png',
             null,

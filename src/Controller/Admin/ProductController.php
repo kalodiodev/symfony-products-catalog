@@ -125,7 +125,7 @@ class ProductController extends AbstractController
     /**
      * Show Product / Upload Product Image
      *
-     * @Route("/{id}/image", name="admin_products_image_upload", methods={"POST"})
+     * @Route("/{id}/images", name="admin_products_image_upload", methods={"POST"})
      * @Route("/{id}", name="admin_products_show", methods={"GET"})
      */
     public function show(Product $product, Request $request, EntityManagerInterface $em, ImageUploader $imageUploader)
@@ -156,5 +156,29 @@ class ProductController extends AbstractController
             'product' => $product,
             'imgForm' => $imageForm->createView()
         ]);
+    }
+
+    /**
+     * Delete product Image
+     *
+     * @Route("/{product}/images/{image}/delete", name="admin_products_image_delete", methods={"POST"})
+     */
+    public function deleteImage(Product $product, ProductImage $image, Request $request, EntityManagerInterface $em)
+    {
+        if (!$this->isCsrfTokenValid('delete', $request->request->get('token'))) {
+            $this->addFlash('error', 'messages.error.token_mismatch');
+
+            return $this->redirectToRoute('admin_products_show', ['id' => $product->getId()]);
+        }
+
+        $em->remove($image);
+        $em->flush();
+
+        $projectDir = $this->getParameter('kernel.project_dir');
+        unlink($projectDir . '/public' . $image->getPath());
+
+        $this->addFlash('success', "admin.products.flash.success.image_deleted");
+
+        return $this->redirectToRoute("admin_products_show", ['id' => $product->getId()]);
     }
 }

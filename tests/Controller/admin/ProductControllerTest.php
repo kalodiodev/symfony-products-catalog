@@ -242,6 +242,20 @@ class ProductControllerTest extends DbWebTestCase
     }
 
     /** @test */
+    public function a_user_cannot_upload_a_product_image_with_invalid_mime_type()
+    {
+        $this->logIn();
+
+        $this->submitProductImage(1, 'test', 'txt', false);
+
+        $this->assertRouteSame('admin_products_image_upload', ['id' => 1]);
+
+        $productImages = $this->entityManager->getRepository(ProductImage::class)->findAll();
+
+        $this->assertCount(0, $productImages);
+    }
+
+    /** @test */
     public function a_guest_cannot_delete_a_product_image()
     {
         $this->client->request('POST', '/admin/products/1/images/1/delete');
@@ -274,15 +288,21 @@ class ProductControllerTest extends DbWebTestCase
         $this->assertFalse(file_exists($image_path), 'File was not deleted');
     }
 
-    protected function submitProductImage($productId = 1, $filename = 'test', $extension = 'png')
+    protected function submitProductImage($productId = 1, $filename = 'test', $extension = 'png', $validImage = true)
     {
+        if ($validImage == true) {
+            $file = Storage::createFakeImageFile($filename, $extension, null,10, 10);
+        } else {
+            $file = Storage::createFakeFile($filename, $extension, null, 'text/plain');
+        }
+
         $crawler = $this->client->request('GET', '/admin/products/' . $productId);
         $form = $crawler->selectButton('Upload Image')->form();
 
         $this->client->request('POST', '/admin/products/' . $productId . '/images', [
             'product_image' => [
                 '_token' => $form['product_image[_token]']->getValue(),
-                'image' => Storage::createFakeImageFile($filename, $extension)
+                'image' => $file
             ]
         ]);
 

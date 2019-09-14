@@ -40,4 +40,32 @@ class Storage {
             true
         );
     }
+
+    /**
+     * Create fake file
+     *
+     * @param $filename
+     * @param $extension
+     * @param null $folder
+     * @param string $mimeType
+     * @return UploadedFile
+     */
+    public static function createFakeFile($filename, $extension, $folder = null, $mimeType = 'text/plain')
+    {
+        if (! $folder) {
+            $folder = sys_get_temp_dir();
+        }
+
+        $file = tempnam($folder, 'upl');
+        $newFile = $folder . '/' . $filename . '.' . $extension;
+        rename($file, $newFile);
+
+        return new UploadedFile(
+            $newFile,
+            $filename,
+            $mimeType,
+            null,
+            true
+        );
+    }
 }

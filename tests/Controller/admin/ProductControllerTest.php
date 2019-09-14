@@ -233,9 +233,8 @@ class ProductControllerTest extends DbWebTestCase
 
         $this->assertResponseRedirects('/admin/products/1');
 
-        $productImages = $this->entityManager->getRepository(ProductImage::class)->findAll();
-        $projectDir = $this->client->getContainer()->getParameter('kernel.project_dir');
-        $image_path = $projectDir . '/public/' . $productImages[0]->getPath();
+        $productImages = $this->productImages(1);
+        $image_path = $this->productImagePath(1);
 
         $this->assertCount(1, $productImages);
         $this->assertTrue(file_exists($image_path), 'File uploaded was not stored to folder');
@@ -261,17 +260,16 @@ class ProductControllerTest extends DbWebTestCase
         $this->logIn();
 
         $this->submitProductImage(1);
-
-        $productImage = $this->entityManager->getRepository(ProductImage::class)->find(1);
-        $projectDir = $this->client->getContainer()->getParameter('kernel.project_dir');
-        $image_path = $projectDir . '/public/' . $productImage->getPath();
+        $image_path = $this->productImagePath(1);
 
         $this->assertTrue(file_exists($image_path));
 
         $this->client->request('GET', '/admin/products/1/edit');
         $this->client->submitForm('Delete Product');
 
-        $deletedProductImage = $this->entityManager->getRepository(ProductImage::class)->find(1);
+        $deletedProductImage = $this->entityManager
+            ->getRepository(ProductImage::class)
+            ->find(1);
 
         $this->assertNull($deletedProductImage, 'Product Image entity was not deleted');
         $this->assertFalse(file_exists($image_path), 'Product image file was not deleted');
@@ -292,9 +290,7 @@ class ProductControllerTest extends DbWebTestCase
 
         // Upload Image
         $this->submitProductImage();
-        $productImage = $this->entityManager->getRepository(ProductImage::class)->find(1);
-        $projectDir = $this->client->getContainer()->getParameter('kernel.project_dir');
-        $image_path = $projectDir . '/public/' . $productImage->getPath();
+        $image_path = $this->productImagePath(1);
 
         $this->assertTrue(file_exists($image_path));
 
@@ -304,10 +300,39 @@ class ProductControllerTest extends DbWebTestCase
 
         $this->assertResponseRedirects('/admin/products/1');
 
-        $productImages = $this->entityManager->getRepository(ProductImage::class)->findAll();
+        $productImages = $this->entityManager
+            ->getRepository(ProductImage::class)
+            ->findAll();
 
         $this->assertCount(0, $productImages);
         $this->assertFalse(file_exists($image_path), 'File was not deleted');
+    }
+
+    private function productImagePath($productImageId)
+    {
+        $productImage = $this->entityManager
+            ->getRepository(ProductImage::class)
+            ->find($productImageId);
+
+        if ($productImage) {
+            $projectDir = $this->client->getContainer()->getParameter('kernel.project_dir');
+
+            return $projectDir . '/public/' . $productImage->getPath();
+        }
+
+        return null;
+    }
+
+    private function productImages($productId)
+    {
+        $productImages = [];
+        $product = $this->entityManager->getRepository(Product::class)->find($productId);
+
+        if ($product) {
+            $productImages = $product->getImages();
+        }
+
+        return $productImages;
     }
 
     protected function submitProductImage($productId = 1, $filename = 'test', $extension = 'png', $validImage = true)

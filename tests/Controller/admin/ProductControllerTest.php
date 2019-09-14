@@ -256,6 +256,28 @@ class ProductControllerTest extends DbWebTestCase
     }
 
     /** @test */
+    public function deleting_a_product_also_deletes_product_images_files()
+    {
+        $this->logIn();
+
+        $this->submitProductImage(1);
+
+        $productImage = $this->entityManager->getRepository(ProductImage::class)->find(1);
+        $projectDir = $this->client->getContainer()->getParameter('kernel.project_dir');
+        $image_path = $projectDir . '/public/' . $productImage->getPath();
+
+        $this->assertTrue(file_exists($image_path));
+
+        $this->client->request('GET', '/admin/products/1/edit');
+        $this->client->submitForm('Delete Product');
+
+        $deletedProductImage = $this->entityManager->getRepository(ProductImage::class)->find(1);
+
+        $this->assertNull($deletedProductImage, 'Product Image entity was not deleted');
+        $this->assertFalse(file_exists($image_path), 'Product image file was not deleted');
+    }
+
+    /** @test */
     public function a_guest_cannot_delete_a_product_image()
     {
         $this->client->request('POST', '/admin/products/1/images/1/delete');

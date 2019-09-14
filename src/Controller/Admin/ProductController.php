@@ -174,9 +174,6 @@ class ProductController extends AbstractController
         $em->remove($image);
         $em->flush();
 
-        $projectDir = $this->getParameter('kernel.project_dir');
-        unlink($projectDir . '/public' . $image->getPath());
-
         $this->addFlash('success', "admin.products.flash.success.image_deleted");
 
         return $this->redirectToRoute("admin_products_show", ['id' => $product->getId()]);

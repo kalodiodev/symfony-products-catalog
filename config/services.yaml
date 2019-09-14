@@ -30,3 +30,12 @@ services:
     App\Utils\ImageUploader:
         arguments:
             $targetDirectory: '%images_directory%'
+
+    # Entity Listeners
+    product_image_listener:
+        class: App\EntityListener\ProductImageListener
+        arguments:
+            $projectDirectory: '%kernel.project_dir%'
+        tags:
+            - { name: doctrine.orm.entity_listener, event: postRemove, entity: App\Entity\ProductImage }
+

@@ -4,14 +4,59 @@
 
 {% block body %}
     <div class="container mt-5">
-        <h1 class="display-3">{{ 'page.product.title'|trans }}</h1>
+        <h1 class="display-3">{{ product.title }}</h1>
         <hr>
 
         <div class="row">
             <div class="col-md-12">
-                <h3>{{ product.title }}</h3>
                 <p>{{ product.description }}</p>
-                <div>{{ product.price }}</div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <h3>Info</h3>
+                        <table>
+                            <tr><th>SKU:</th><td>{{ product.sku }}</td></tr>
+                            <tr><th>Qty:</th><td>{{ product.quantity }}</td></tr>
+                            <tr><th>Price:</th><td>{{ product.price }}</td></tr>
+                        </table>
+                    </div>
+
+                    <div class="col-md-6">
+                        <h3>Categories</h3>
+                        <ul>
+                            {% for category in product.categories %}
+                                <li>{{ category.name }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% if product.categories|length == 0 %}
+                            <p>No Categories available</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="mt-5">
+                    <h3>Attributes</h3>
+                    <table>
+                        {% for attribute in product.attributes %}
+                            <tr><th>{{ attribute.attribute.name }}</th><td>{{ attribute.value }}</td></tr>
+                        {% endfor %}
+                    </table>
+                    {% if product.attributes|length == 0 %}
+                        <p>No attributes available</p>
+                    {% endif %}
+                </div>
+
+                <div class="mt-5">
+                    <h3>Gallery</h3>
+                    <div class="row">
+                        {% for image in product.images %}
+                            <div class="col-md-3">
+                                <img src="{{ image.path }}" alt="">
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>

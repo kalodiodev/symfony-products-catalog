@@ -19,10 +19,9 @@ class ProductControllerTest extends DbWebTestCase
     /** @test */
     public function show_product()
     {
-        $this->client->request('GET', '/products/1');
+        $this->client->request('GET', '/products/product-1');
 
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('h1', 'Product');
-        $this->assertStringContainsString('Product 1', $this->client->getResponse()->getContent());
+        $this->assertSelectorTextContains('h1', 'Product 1');
     }
 }

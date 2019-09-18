@@ -25,6 +25,16 @@ class CategoryController extends AbstractController
     }
 
     /**
+     * @Route("/categories/{slug}", name="categories_show")
+     */
+    public function show(Category $category): Response
+    {
+        return $this->render('category/index.html.twig', [
+            'category' => $category
+        ]);
+    }
+
+    /**
      * Render categories menu in the navigation bar
      * Called directly via the render() function
      */

@@ -10,7 +10,7 @@
     </a>
     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
         {% for category in categories %}
-            <a class="dropdown-item" href="#">{{ category.name }}</a>
+            <a class="dropdown-item" href="{{ path('categories_show', {'slug': category.slug}) }}">{{ category.name }}</a>
         {% endfor %}
     </div>
 </li>
